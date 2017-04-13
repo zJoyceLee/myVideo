@@ -21,17 +21,13 @@
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="info in page.videoinfos"><span class="label label-info">{{info.key}}</span> {{info.value}}
         </ul>
-        <!-- <div class="panel-body" ng-if="page.videoinfos.key | filter{'key': 'Definition'}">
-          hello
-          <select ng-option="row for row in page.videoinfos.value"></select>
-        </div> -->
       </div>
       <div ng-if="!page.success" class="panel panel-danger">
         <div class="panel-heading">
           This is Failed Info
         </div>
         <div class="panel-body">
-          Error: xxxx
+          loading or error
         </div>
       </div>
     </div>
@@ -59,22 +55,14 @@
         </vg-controls>
         <vg-overlay-play></vg-overlay-play>
         <vg-buffering></vg-buffering>
-        <!-- <vg-poster vg-url='page.config.plugins.poster'></vg-poster> -->
       </videogular>
-      <!-- <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
-      poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
-        <source src="http://118.228.16.121/youku/6558E3D524784017077A23CD/030008070158DB39993BCA32BA9DFCAF429C25-A0E6-5F85-00FC-3E02FA22D7CF.mp4?sid=049149627882512a3c67d_00&ctype=12" type='video/mp4'>
-        <source src="MY_VIDEO.webm" type='video/webm'>
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a web browser that
-          <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-        </p>
-      </video> -->
+
       <div class="btn-group">
         <span class="label label-primary">Video Pieces</span>
         <button class="btn-default" type="button" ng-repeat="item in page.videos track by $index" ng-click="page.setVideo($index)">{{$index}}</button>
       </div>
     </div>
+
 
   </div>
 </div>
