@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-lg-1"></div>
+  <div class="videogular-container col-lg-10">
+    <videogular vg-theme="page.config.theme.url">
+      <vg-media vg-src="page.config.sources" vg-tracks="page.config.tracks"></vg-media>
+      <vg-controls vg-autohide="page.config.plugins.controls.autoHide" vg-autohide-time="page.config.plugins.controls.autoHideTime">
+        <vg-play-pause-button></vg-play-pause-button>
+        <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}</vg-time-display>
+        <vg-scrub-bar>
+          <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+        </vg-scrub-bar>
+        <vg-time-display>{{ timeLeft | date:'mm:ss':'+0000' }}</vg-time-display>
+        <vg-time-display>{{ totalTime | date:'mm:ss':'+0000' }}</vg-time-display>
+        <vg-volume>
+          <vg-mute-button></vg-mute-button>
+          <vg-volume-bar></vg-volume-bar>
+        </vg-volume>
+        <vg-playback-button></vg-playback-button>
+        <vg-fullscreen-button></vg-fullscreen-button>
+      </vg-controls>
+    </videogular>
+  </div>
+
+  <!-- <div class="videogular-container">
+    <videogular vg-player-ready="page.onPlayerReady($API)" vg-complete="page.onCompleteVideo()"
+    vg-theme="page.config.theme.url">
+      <vg-media vg-src="page.config.sources" vg-tracks="page.config.tracks">
+      </vg-media>
+      <vg-controls>
+        <vg-play-pause-button></vg-play-pause-button>
+        <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}</vg-time-display>
+        <vg-scrub-bar>
+          <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+        </vg-scrub-bar>
+        <vg-time-display>{{ timeLeft | date:'mm:ss':'+0000' }}</vg-time-display>
+        <vg-volume>
+          <vg-mute-button></vg-mute-button>
+          <vg-volume-bar></vg-volume-bar>
+        </vg-volume>
+        <vg-playback-button></vg-playback-button>
+        <vg-fullscreen-button></vg-fullscreen-button>
+      </vg-controls>
+      <vg-overlay-play></vg-overlay-play>
+      <vg-buffering></vg-buffering>
+    </videogular>
+  </div>
+  <div class="playlist">
+    <ul>
+      <li ng-repeat="item in page.videos track by $index">
+        <a ng-click="page.setVideo($index)">
+          {{$index}}
+        </a>
+      </li>
+    </ul>
+  </div> -->
+</div>

@@ -20,6 +20,10 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
       url: '/download',
       component: 'download'
     })
+    .state('test', {
+      url: '/test',
+      component: 'test'
+    })
     .state('about', {
       url: '/about',
       component: 'about'
