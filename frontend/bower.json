@@ -13,6 +13,7 @@
     "videogular-themes-default": "^1.4.4",
     "angular-sanitize": "^1.6.4",
     "videogular-controls": "^1.4.4",
-    "videogular-overlay-play": "^1.4.4"
+    "videogular-overlay-play": "^1.4.4",
+    "videogular-buffering": "^1.4.4"
   }
 }
