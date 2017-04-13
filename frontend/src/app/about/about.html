@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-lg-4">
+    <img src="https://avatars2.githubusercontent.com/u/8036857?v=3&s=460" class="img-responsive" alt="myLogo">
+    <h3>zJoyceLee</h3>
+    <p><a href="https://github.com/zJoyceLee">myGithub</a></p>
+  </div>
+  <div class="col-lg-4">
+    <div ng-repeat="item in page.info track by $index" class="text-center" href="{{item.src}}">
+      <div class="row">
+        <label class="label label-danger label-lg">{{ item.key }}</label>
+        <span>{{ item.value }}</span>
+      </div>
+      <div class="row">
+        <a href="{{item.src}}">
+          <img src="{{ item.img }}" alt="{{ item.key }}" class="img-rounded" height="70px">
+        </a>
+        <!-- {{item}} -->
+      </div>
+      <br />
+      <br />
+    </div>
+  </div>
+  <div class="col-lg-4">
+    {{ page.introduction }}
+  </div>
+</div>

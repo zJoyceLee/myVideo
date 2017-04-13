@@ -1,0 +1,18 @@
+{
+  "name": "fountain-inject",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "^1.6.2",
+    "angular-ui-router": "1.0.0-beta.3",
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.6.2",
+    "bootstrap": "^3.3.7",
+    "videogular": "^1.4.4",
+    "videogular-themes-default": "^1.4.4",
+    "angular-sanitize": "^1.6.4",
+    "videogular-controls": "^1.4.4",
+    "videogular-overlay-play": "^1.4.4"
+  }
+}
