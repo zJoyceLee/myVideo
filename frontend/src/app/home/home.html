@@ -1,1 +1,12 @@
-<h1>{{ page.msg }}</h1>
+<div class="row">
+  <p class="text-center">{{page.msg}}</p>
+  <div class="col-lg-12">
+    <ul class="list-group">
+      <li class="list-group-item" ng-repeat="item in page.homelst">
+        <button class="btn btn-xs btn-danger" ng-click="page.homesearch(item.href)" ui-sref="online">Online</button>
+        <button class="btn btn-xs btn-primary" ng-click="page.homedownload(item.href)" ui-sref="download">Download</button>
+        {{item.title}}
+      </li>
+    </ul>
+  </div>
+</div>
