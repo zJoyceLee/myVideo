@@ -19,7 +19,14 @@
           This is Search Result
         </div>
         <ul class="list-group">
-          <li class="list-group-item" ng-repeat="info in page.videoinfos"><span class="label label-info">{{info.key}}</span> {{info.value}}
+          <li class="list-group-item" ng-repeat="info in page.videoinfos">
+            <span class="label label-info">{{info.key}}</span> {{info.value}}
+          </li>
+          <li class="list-group-item" ng-if="page.loadcomplete">
+            <button class="label label-primary" ng-repeat="v in page.playlst" ng-click="page.select(v.href)">
+              {{v.text}}
+            </button>
+          </li>
         </ul>
       </div>
       <div ng-if="!page.success" class="panel panel-danger">
