@@ -1,3 +1,7 @@
 body {
   padding: 65px;
 }
+
+.thumbnail img {
+  height: 100px;
+}
