@@ -14,10 +14,10 @@ function inject() {
     conf.path.src('**/*.css')
   ], {read: false});
   const injectScripts = gulp.src([
-    conf.path.src('../bower_components/**/*.min.js'),
-    `!${conf.path.src('../bower_components/angular/**/*.js')}`,
     conf.path.tmp('**/*.js'),
-    `!${conf.path.tmp('**/*.spec.js')}`
+    `!${conf.path.tmp('**/*.spec.js')}`,
+    conf.path.src('../bower_components/**/*.min.js'),
+    `!${conf.path.src('../bower_components/angular/**/*.js')}`
   ])
   .pipe(angularFilesort()).on('error', conf.errorHandler('AngularFilesort'));
 
