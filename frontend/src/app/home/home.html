@@ -1,12 +1,12 @@
 <div class="row">
-  <p class="text-center">{{page.msg}}</p>
-  <div class="col-lg-12">
-    <ul class="list-group">
-      <li class="list-group-item" ng-repeat="item in page.homelst">
+  <div class="col-sm-4 col-md-2" ng-repeat="item in page.lst">
+    <div class="thumbnail">
+      <img src="{{item.img}}" alt="通用的占位符缩略图" height="120px">
+      <div class="caption">
         <button class="btn btn-xs btn-danger" ng-click="page.homesearch(item.href)" ui-sref="online">Online</button>
         <button class="btn btn-xs btn-primary" ng-click="page.homedownload(item.href)" ui-sref="download">Download</button>
-        {{item.title}}
-      </li>
-    </ul>
+        <span>{{item.title}}</span>
+      </div>
+    </div>
   </div>
 </div>

@@ -6,19 +6,30 @@ angular
     controllerAs: 'page'
   });
 
-function Controller($log) {
+Controller.$inject = ['$log', '$http', 'myService'];
+
+function Controller($log, $http, myService) {
   const vm = this;
-  vm.msg = 'Hello, Home.';
-  vm.homelst = [
-    {title: '[晓说]高晓松深挖2017奥斯卡 感慨颁奖小年佳作少', href: 'http://v.youku.com/v_show/id_XMjcwMTU3OTQyOA==.html'},
-    {title: '人民的名义 TV版', href: 'http://v.youku.com/v_show/id_XMjcwNjcwODY1Mg==.html'},
-    {title: '鲜肉老师', href: 'http://v.youku.com/v_show/id_XMjY2NjM5MjE3Ng==.html'},
-    {title: '三生三世十里桃花', href: 'http://v.youku.com/v_show/id_XMjQ4MTc0ODMyOA==.html'}
-  ];
+
+  $http({
+    method: 'GET',
+    url: 'http://127.0.0.1:5000/videoLst'
+  }).then((response) => {
+    $log.log('get success');
+    $log.log(response.data);
+
+    vm.lst = response.data.videos;
+  }, () => {
+    $log.log('get failure.');
+  });
+
   vm.homesearch = function (i) {
     $log.log('search', i);
+    // $state.go('online', {url: i});
+    myService.set(i);
   };
   vm.homedownload = function (i) {
     $log.log('download', i);
+    myService.set(i);
   };
 }
