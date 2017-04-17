@@ -13,11 +13,59 @@ angular.module('app.online', [
   controllerAs: 'page'
 });
 
-Controller.$inject = ['$sce', '$timeout', '$http', '$log'];
-function Controller($sce, $timeout, $http, $log) {
+Controller.$inject = ['$sce', '$timeout', '$http', '$log', 'myService'];
+function Controller($sce, $timeout, $http, $log, myService) {
   const vm = this;
-  vm.myurl = 'http://v.youku.com/v_show/id_XMjY3Mjc0NjMyMA==';
-  vm.myurl = 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html';
+
+  // vm.myurl = 'http://v.youku.com/v_show/id_XMjY3Mjc0NjMyMA==';
+  ($.isEmptyObject(myService.get()))? (vm.myurl = 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html'):(vm.myurl = myService.get())
+  // vm.myurl = myService.get() || 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html';
+  vm.playlst = [
+    {href: 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', text: '1', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY3NDYyMTUwMA==.html', text: '2', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY3NzU2MTA2MA==.html', text: '3', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY3Nzc1NTY5Ng==.html', text: '4', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY3OTk4NzM2NA==.html', text: '5', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4MjA5MDIxMg==.html', text: '6', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4Mzg5ODI5Mg==.html', text: '7', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4NDAyMDQ1Mg==.html', text: '8', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4NTYyMjIyMA==.html', text: '9', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4NTc0NDQwOA==.html', text: '10', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4NzQxODYwMA==.html', text: '11', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4NzU0NDI1Mg==.html', text: '12', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4OTQ5ODI4MA==.html', text: '13', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY4OTcyOTUwOA==.html', text: '14', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY5MTc1MjQ0MA==.html', text: '15', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY5MTkwOTU2OA==.html', text: '16', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY5MzkwOTQwOA==.html', text: '17', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY5NTgzMTE0NA==.html', text: '18', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY5NzgxOTgwMA==.html', text: '19', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjY5Nzk0NTk5Mg==.html', text: '20', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwMDAzNzk5Mg==.html', text: '21', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwMDE4MjMwOA==.html', text: '22', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwMjI3ODc1Ng==.html', text: '23', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwMjQxMzYwNA==.html', text: '24', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNDQyNDUwOA==.html', text: '25', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNDU0NjAwMA==.html', text: '26', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjQ1MjQ4OA==.html', text: '27', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjcwODY1Mg==.html', text: '28', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDg3Mg==.html', text: '29', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDg5Mg==.html', text: '30', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDk3Mg==.html', text: '31', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjU3NzQwOA==.html', text: '32', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDgwOA==.html', text: '33', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDc4OA==.html', text: '34', title: null},
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDc4MA==.html', text: '35', title: null}];
+  function inLst(url, lst) {
+    let ret = false;
+    $.map(lst, (o) => {
+      if (o.href === url) {
+        ret = true;
+      }
+    });
+    return ret;
+  }
+
   vm.searched = false;
   vm.loadcomplete = false;
   vm.success = true;
@@ -26,7 +74,7 @@ function Controller($sce, $timeout, $http, $log) {
   vm.currentVideo = 0;
   vm.onPlayerReady = function (API) {
     vm.API = API;
-    $log.log('api', vm.API);
+    // $log.log('api', vm.API);
   };
   vm.onCompleteVideo = function () {
     vm.isCompleted = true;
@@ -84,52 +132,19 @@ function Controller($sce, $timeout, $http, $log) {
           }
         }
       };
+      $log.log('here', inLst(vm.myurl, vm.playlst));
+      vm.inlst = inLst(vm.myurl, vm.playlst);
       vm.loadcomplete = true;
     }, () => {
       $log.log('post failure.');
       vm.success = false;
     });
   };
+  ($.isEmptyObject(myService.get())) || vm.search();
 
-  vm.playlst = [
-    {href: '//v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', text: '1', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY3NDYyMTUwMA==.html', text: '2', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY3NzU2MTA2MA==.html', text: '3', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY3Nzc1NTY5Ng==.html', text: '4', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY3OTk4NzM2NA==.html', text: '5', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4MjA5MDIxMg==.html', text: '6', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4Mzg5ODI5Mg==.html', text: '7', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4NDAyMDQ1Mg==.html', text: '8', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4NTYyMjIyMA==.html', text: '9', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4NTc0NDQwOA==.html', text: '10', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4NzQxODYwMA==.html', text: '11', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4NzU0NDI1Mg==.html', text: '12', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4OTQ5ODI4MA==.html', text: '13', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY4OTcyOTUwOA==.html', text: '14', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY5MTc1MjQ0MA==.html', text: '15', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY5MTkwOTU2OA==.html', text: '16', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY5MzkwOTQwOA==.html', text: '17', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY5NTgzMTE0NA==.html', text: '18', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY5NzgxOTgwMA==.html', text: '19', title: null},
-    {href: '//v.youku.com/v_show/id_XMjY5Nzk0NTk5Mg==.html', text: '20', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwMDAzNzk5Mg==.html', text: '21', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwMDE4MjMwOA==.html', text: '22', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwMjI3ODc1Ng==.html', text: '23', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwMjQxMzYwNA==.html', text: '24', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNDQyNDUwOA==.html', text: '25', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNDU0NjAwMA==.html', text: '26', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjQ1MjQ4OA==.html', text: '27', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjcwODY1Mg==.html', text: '28', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjg2MDg3Mg==.html', text: '29', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjg2MDg5Mg==.html', text: '30', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjg2MDk3Mg==.html', text: '31', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjU3NzQwOA==.html', text: '32', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjg2MDgwOA==.html', text: '33', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjg2MDc4OA==.html', text: '34', title: null},
-    {href: '//v.youku.com/v_show/id_XMjcwNjg2MDc4MA==.html', text: '35', title: null}];
   vm.select = function (i) {
     $log.log(i);
-    vm.myurl = 'http:' + i;
+    // vm.myurl = 'http:' + i;
     vm.search();
   };
 }
