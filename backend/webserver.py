@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import json
 import random
+import re
 import subprocess
 from flask import Flask, request, redirect, url_for, jsonify, Response
 from flask_cors import CORS
@@ -49,8 +50,8 @@ def search():
     if request.method == 'POST':
         url = request.json['url']
         print('{}, [URL]{}'.format('get url from client post'.upper(), url))
-        # handle url => real urls
 
+        # handle url => real urls
         result = subprocess.check_output(['python3', './you-get/you-get', '-u', '--format=mp4', url])
         print(result)
         data = parseRelUrl(result)
@@ -76,6 +77,19 @@ def videoLst():
         pass
     if request.method == 'GET':
         print('get'.upper())
+
+
+@app.route('/infos', methods=['POST'])
+def info():
+    if request.method == 'POST':
+        url = request.json['url']
+        print('{}, [URL]{}'.format('get url from client post'.upper(), url))
+
+        result = subprocess.check_output(['python3', './you-get/you-get', '-i', url])
+        print(result)
+       # starchObj = re.search(r'')
+
+        return jsonify({'data': result})
 
 if __name__ == "__main__":
     app.run()
