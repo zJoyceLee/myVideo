@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="col-lg-4 col-sm-3"></div>
+  <div class="col-lg-4 col-sm-6">
+    <div class="pull-right">
+      <button class="btn btn-link" ng-disabled="page.isRegister" ng-click="page.switch()">Register</button>
+      <span>/</span>
+      <button class="btn btn-link" ng-disabled="!page.isRegister" ng-click="page.switch()">Sign in</button>
+    </div>
+
+    <form>
+      <!-- Sign in -->
+      <div ng-if="!page.isRegister">
+        <h2>Sign in</h2>
+        <input type="text" class="form-control" placeholder="Username" required="" autofocus="" ng-model="page.username">
+        <input type="password" class="form-control" placeholder="Password" required="" ng-model="page.passwd">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me" ng-model="page.remember">Remember me
+          </label>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" ng-click="page.login()">Sign in</button>
+      </div>
+      <!-- Register -->
+      <div ng-if="page.isRegister">
+        <h2>Register</h2>
+        <input type="text" class="form-control" placeholder="Username" required="" autofocus="" ng-model="page.username">
+        <input type="password" class="form-control" placeholder="Password" required="" ng-model="page.passwd">
+        <input type="password" class="form-control" placeholder="ConfirmPassword" required="" ng-model="page.confirmpasswd">
+        <div class="bg-danger" ng-if="page.passwd !== page.confirmpasswd">Password don't match.</div>
+
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me" ng-model="page.remember">Remember me
+          </label>
+        </div>
+        <button class="btn btn-info btn-block" type="submit" ng-click="page.register()">Register</button>
+      </div>
+    </form>
+  </div>
+
+</div>
