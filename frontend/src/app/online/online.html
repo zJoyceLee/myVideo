@@ -20,7 +20,7 @@
         </div>
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="info in page.videoinfos">
-            <span class="label label-info">{{info.key}}</span> {{info.value}}
+            <span class="label label-info flag">{{info.key}}</span> {{info.value}}
           </li>
           <li class="list-group-item" ng-if="page.loadcomplete && page.inlst">
             <button class="label label-primary" ng-repeat="v in page.playlst" ng-click="page.select(v.href)">
@@ -65,7 +65,8 @@
       </videogular>
 
       <div class="btn-group">
-        <span class="label label-primary">Video Pieces</span>
+        <span class="btn btn-xs btn-danger">Playing {{ page.currentVideo }}</span>
+        <span class="btn btn-xs btn-primary">Video Pieces</span>
         <button class="btn-default" type="button" ng-repeat="item in page.videos track by $index" ng-click="page.setVideo($index)">{{$index}}</button>
       </div>
     </div>
