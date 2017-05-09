@@ -85,11 +85,10 @@ def info():
         url = request.json['url']
         print('{}, [URL]{}'.format('get url from client post'.upper(), url))
 
-        result = subprocess.check_output(['python3', './you-get/you-get', '-i', url])
+        result = subprocess.check_output(['python3', './you-get/you-get', '--json', url])
         print(result)
-       # starchObj = re.search(r'')
 
-        return jsonify({'data': result})
+        return jsonify({'infos': result})
 
 if __name__ == "__main__":
     app.run()
