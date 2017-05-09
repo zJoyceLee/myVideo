@@ -68,13 +68,13 @@ function Controller($sce, $timeout, $http, $log, myService) {
 
   vm.searched = false;
   vm.loadcomplete = false;
-  vm.success = true;
+  vm.success = false;
+
   vm.state = null;
   vm.API = null;
   vm.currentVideo = 0;
   vm.onPlayerReady = function (API) {
     vm.API = API;
-    // $log.log('api', vm.API);
   };
   vm.onCompleteVideo = function () {
     vm.isCompleted = true;
@@ -90,7 +90,15 @@ function Controller($sce, $timeout, $http, $log, myService) {
     vm.config.sources = vm.videos[index].sources;
     $timeout(vm.API.play.bind(vm.API), 100);
   };
+  vm.change = function () {
+    vm.searched = false;
+  }
   vm.search = function () {
+    // reset
+    vm.loadcomplete = false;
+    vm.success = false;
+    // reset end
+
     vm.searched = true;
     $http({
       method: 'POST',
@@ -104,9 +112,7 @@ function Controller($sce, $timeout, $http, $log, myService) {
       vm.success = true;
 
       vm.urls = response.data.urls;
-      $log.log('response data url', vm.urls);
       vm.videoinfos = response.data.infos;
-      $log.log('respanse data infos', vm.videoinfos);
 
       vm.videos = [];
       $.map(vm.urls, (o) => {
@@ -116,10 +122,8 @@ function Controller($sce, $timeout, $http, $log, myService) {
             type: 'video/mp4'
           }]
         };
-        // $log.log(videopiece);
         vm.videos.push(videopiece);
       });
-      $log.log('videos, vm.videos', vm.videos);
       vm.config = {
         preload: 'none',
         autoPlay: false,
@@ -132,19 +136,20 @@ function Controller($sce, $timeout, $http, $log, myService) {
           }
         }
       };
-      $log.log('here', inLst(vm.myurl, vm.playlst));
+      // $log.log('here', inLst(vm.myurl, vm.playlst));
       vm.inlst = inLst(vm.myurl, vm.playlst);
       vm.loadcomplete = true;
     }, () => {
       $log.log('post failure.');
       vm.success = false;
+      vm.loadcomplete = true;
     });
   };
   ($.isEmptyObject(myService.get())) || vm.search();
 
   vm.select = function (i) {
     $log.log(i);
-    // vm.myurl = 'http:' + i;
+    vm.myurl = i;
     vm.search();
   };
 }
