@@ -5,3 +5,11 @@ body {
 .thumbnail img {
   height: 100px;
 }
+
+.checkbox input {
+  margin-top: 2px;
+}
+
+.flag {
+  font-size: 95%;
+}
