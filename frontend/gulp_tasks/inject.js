@@ -17,7 +17,8 @@ function inject() {
     conf.path.tmp('**/*.js'),
     `!${conf.path.tmp('**/*.spec.js')}`,
     conf.path.src('../bower_components/**/*.min.js'),
-    `!${conf.path.src('../bower_components/angular/**/*.js')}`
+    `!${conf.path.src('../bower_components/angular/**/*.js')}`,
+    `!${conf.path.src('../bower_components/lodash/**/*.*.js')}`
   ])
   .pipe(angularFilesort()).on('error', conf.errorHandler('AngularFilesort'));
 
