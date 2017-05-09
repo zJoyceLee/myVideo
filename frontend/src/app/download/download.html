@@ -3,12 +3,27 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Entry the url of video..." ng-model="page.myurl">
+        <input type="text" class="form-control" placeholder="Entry the url of video..." ng-model="page.myurl" ng-disabled="page.searched">
         <span class="input-group-btn">
-          <button class="btn btn-default" type="button" ng-click="page.search()">Go!</button></span>
+          <button class="btn btn-default" type="button" ng-click="page.search()" ng-if="!page.searched">Go!</button>
+          <button class="btn btn-danger" type="button" ng-click="page.change()" ng-if="page.searched" ng-disabled="!page.loadcomplete">Change</button>
+        </span>
       </div>
     </div>
   </div>
+
+  <!-- Loading -->
+  <!-- <loading ng-if="page.searched && !page.success"></loading> -->
+  <!-- Loading -->
+  <loading ng-if="page.searched && !page.success && !page.loadcomplete"></loading>
+
+  <!-- Post failure -->
+  <div class="jumbotron" ng-if="page.loadcomplete && !page.success">
+      <h2>Post Failure</h2>
+      <p>Something error</p>
+    </div>
+  </div>
+
   <!-- displayed after searched -->
   <div class="row" ng-if="page.searched">
   <!-- <div class="row"> -->
@@ -18,29 +33,45 @@
         <div class="panel-heading">
           This is Search Result
         </div>
-        <!-- <ul class="list-group">
-          <li class="list-group-item" ng-repeat="info in page.videoinfos">
-            <span class="label label-info">{{info.key}}</span> {{info.value}}
-          </li>
-          <li class="list-group-item" ng-if="page.loadcomplete && page.inlst">
-            <button class="label label-primary" ng-repeat="v in page.playlst" ng-click="page.select(v.href)">
-              {{v.text}}
-            </button>
-          </li>
-        </ul> -->
-        <div>{{page.infos}}</div>
-      </div>
-      <div ng-if="!page.success" class="panel panel-danger">
-        <div class="panel-heading">
-          This is Failed Info
+        <div class="col-lg-2 col-sm-3">
+          <h4>{{ page.infos.title }}</h4>
+          <h5>
+            <span class="label label-info">Site</span> {{page.infos.site}}
+          </h5>
+          <h5 ng-repeat="item in page.infos.audiolang track by $index">
+            <span class="label label-danger">Audio Language</span> {{item.lang}}
+          </h5>
         </div>
-        <div class="panel-body">
-          loading or error
+
+        <div class="col-lg-10 col-sm-9">
+          <table class="table table-hover">
+            <tr>
+              <th>#</th>
+              <th>Format</th>
+              <th>Continer</th>
+              <!-- <th>Video profile</th> -->
+              <th>Size (bytes)</th>
+              <th>Option</th>
+            </tr>
+            <tr ng-repeat="item in page.streams | orderBy: 'page.infos.streams[item].size'">
+              <td><input type="checkbox" ng-model="page.infos.streams[item].checked" ng-click="page.check()"></td>
+              <td>
+                {{item}}
+                <span class="label label-primary flag">{{page.infos.streams[item].video_profile}}</span>
+                <span class="label label-danger flag">{{page.infos.streams[item].size / 1048576 | number: 2}} Mib</span>
+              </td>
+              <td>{{page.infos.streams[item].container}}</td>
+              <!-- <td></td> -->
+              <td>{{page.infos.streams[item].size}}</td>
+              <td><button class="btn btn-xs">Download</button></td>
+            </tr>
+
+          </table>
+          <!-- {{page.infos.streams}} -->
         </div>
+
       </div>
     </div>
-
-
 
   </div>
 </div>

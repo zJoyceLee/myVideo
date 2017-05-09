@@ -16,10 +16,18 @@ function Controller($log, $http, myService) {
 
   vm.searched = false;
   vm.loadcomplete = false;
-  vm.success = true;
+  vm.success = false;
 
+  vm.change = function () {
+    vm.searched = false;
+  }
 
   vm.search = function () {
+    // reset
+    vm.loadcomplete = false;
+    vm.success = false;
+    // reset end
+
     vm.searched = true;
     $http({
       method: 'POST',
@@ -30,7 +38,8 @@ function Controller($log, $http, myService) {
     }).then((response) => {
       $log.log('post success');
 
-      vm.infos = response.data.data;
+      vm.infos = JSON.parse(response.data.infos);
+      vm.streams = _.keysIn(vm.infos.streams);
       $log.log(vm.infos);
       vm.success = true;
 
@@ -39,11 +48,15 @@ function Controller($log, $http, myService) {
       // vm.videoinfos = response.data.infos;
       // $log.log('respanse data infos', vm.videoinfos);
 
-      // vm.loadcomplete = true;
+      vm.loadcomplete = true;
     }, () => {
       $log.log('post failure.');
       vm.success = false;
+      vm.loadcomplete = true;
     });
   };
   ($.isEmptyObject(myService.get())) || vm.search();
+  vm.check = function() {
+    $log.log(vm.infos);
+  }
 }
