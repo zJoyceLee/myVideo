@@ -12,6 +12,10 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
       url: '/login',
       component: 'login'
     })
+    .state('loading', {
+      url: '/loading',
+      component: 'loading'
+    })
     .state('home', {
       url: '/',
       component: 'home'
