@@ -11,7 +11,9 @@ gulp.task('inject', inject);
 function inject() {
   const injectStyles = gulp.src([
     conf.path.src('../bower_components/**/*.css'),
-    conf.path.src('**/*.css')
+    conf.path.src('**/*.css'),
+    `!${conf.path.src('../bower_components/lodash/**/*.*.css')}`,
+    `!${conf.path.src('../bower_components/lodash/**/*.css')}`
   ], {read: false});
   const injectScripts = gulp.src([
     conf.path.tmp('**/*.js'),
