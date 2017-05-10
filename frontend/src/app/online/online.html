@@ -6,24 +6,24 @@
         <input type="text" class="form-control" placeholder="Entry the url of video..." ng-model="page.myurl" ng-disabled="page.searched">
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-click="page.search()" ng-if="!page.searched">Go!</button>
+          <button class="btn btn-warning" type="button" ng-click="page.goto()" ng-if="page.searched" ng-disabled="!page.loadcomplete">Go to Download</button>
           <button class="btn btn-danger" type="button" ng-click="page.change()" ng-if="page.searched" ng-disabled="!page.loadcomplete">Change</button>
         </span>
       </div>
     </div>
   </div>
-
+  <br />
   <!-- Loading -->
   <loading ng-if="page.searched && !page.success && !page.loadcomplete"></loading>
 
   <!-- Post failure -->
-  <div class="jumbotron" ng-if="page.loadcomplete && !page.success">
-      <h2>Post Failure</h2>
-      <p>Something error</p>
-    </div>
+  <div class="jumbotron" ng-if="page.loadcomplete && (!page.success || !page.haveMP4)">
+    <h2>Something Occurs.</h2>
+    <p>{{ page.mydata.infos }}</p>
   </div>
 
   <!-- displayed after searched -->
-  <div class="row" ng-if="page.success">
+  <div class="row" ng-if="page.success && page.haveMP4">
   <!-- <div class="row"> -->
     <!-- infos -->
     <div class="col-lg-3 col-sm-3">
@@ -35,12 +35,23 @@
           <li class="list-group-item" ng-repeat="info in page.videoinfos">
             <span class="label label-info flag">{{info.key}}</span> {{info.value}}
           </li>
-          <li class="list-group-item" ng-if="page.loadcomplete && page.inlst">
+          <!-- <li class="list-group-item" ng-if="page.loadcomplete && page.inlst">
             <button ng-class="item.href === page.myurl? 'btn btn-xs btn-primary': 'btn btn-xs btn-default'" ng-repeat="item in page.playlst" ng-click="page.select(item.href)">
               {{ item.text }}
             </button>
-          </li>
+          </li> -->
         </ul>
+      </div>
+      <div ng-if="page.success" class="panel panel-success">
+        <div class="panel-heading">
+          Serie
+          <button class="pull-right btn btn-default btn-xs" ng-click="page.getSerie()">Get</button>
+        </div>
+          <div ng-if="page.loadcomplete && page.inlst">
+            <button ng-class="item.href === page.myurl? 'btn btn-xs btn-primary': 'btn btn-xs btn-default'" ng-repeat="item in page.playlst" ng-click="page.select(item.href)">
+              {{ item.text }}
+            </button>
+          </div>
       </div>
     </div>
 
