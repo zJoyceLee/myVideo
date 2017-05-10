@@ -6,11 +6,13 @@
         <input type="text" class="form-control" placeholder="Entry the url of video..." ng-model="page.myurl" ng-disabled="page.searched">
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-click="page.search()" ng-if="!page.searched">Go!</button>
+          <button class="btn btn-warning" type="button" ng-if="page.searched" ng-disabled="!page.loadcomplete" ui-sref="online">Go to Online</button>
           <button class="btn btn-danger" type="button" ng-click="page.change()" ng-if="page.searched" ng-disabled="!page.loadcomplete">Change</button>
         </span>
       </div>
     </div>
   </div>
+  <br />
 
   <!-- Loading -->
   <!-- <loading ng-if="page.searched && !page.success"></loading> -->
