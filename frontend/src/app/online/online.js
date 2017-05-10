@@ -16,10 +16,20 @@ angular.module('app.online', [
 Controller.$inject = ['$sce', '$timeout', '$http', '$log', 'myService'];
 function Controller($sce, $timeout, $http, $log, myService) {
   const vm = this;
+  let global = {};
+  if (_.isEmpty(myService.get())) {
+    global = {'url': 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', 'playlist': []};
+  } else {
+    global = myService.get();
+  }
+  vm.myurl = global.url;
 
-  // vm.myurl = 'http://v.youku.com/v_show/id_XMjY3Mjc0NjMyMA==';
-  ($.isEmptyObject(myService.get()))? (vm.myurl = 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html'):(vm.myurl = myService.get())
-  // vm.myurl = myService.get() || 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html';
+  $log.log('global', global);
+
+  vm.getSerie = function () {
+    $log.log('get serie click...');
+
+  };
   vm.playlst = [
     {href: 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', text: '1', title: null},
     {href: 'http://v.youku.com/v_show/id_XMjY3NDYyMTUwMA==.html', text: '2', title: null},
@@ -55,7 +65,8 @@ function Controller($sce, $timeout, $http, $log, myService) {
     {href: 'http://v.youku.com/v_show/id_XMjcwNjU3NzQwOA==.html', text: '32', title: null},
     {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDgwOA==.html', text: '33', title: null},
     {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDc4OA==.html', text: '34', title: null},
-    {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDc4MA==.html', text: '35', title: null}];
+    {href: 'http://v.youku.com/v_show/id_XMjcwNjg2MDc4MA==.html', text: '35', title: null}
+  ];
   function inLst(url, lst) {
     let ret = false;
     $.map(lst, (o) => {
@@ -69,6 +80,7 @@ function Controller($sce, $timeout, $http, $log, myService) {
   vm.searched = false;
   vm.loadcomplete = false;
   vm.success = false;
+  vm.haveMP4 = false;
 
   vm.state = null;
   vm.API = null;
@@ -94,9 +106,14 @@ function Controller($sce, $timeout, $http, $log, myService) {
     vm.searched = false;
   }
   vm.search = function () {
+    global.url = vm.myurl;
+    myService.set(global);
+    $log.log(global);
+    $log.log('searched url', vm.myurl);
     // reset
     vm.loadcomplete = false;
     vm.success = false;
+    vm.haveMP4 = false;
     // reset end
 
     vm.searched = true;
@@ -110,34 +127,41 @@ function Controller($sce, $timeout, $http, $log, myService) {
       $log.log('post success');
 
       vm.success = true;
+      vm.mydata = response.data;
+      $log.log(vm.mydata);
+      vm.haveMP4 = vm.mydata.haveMP4;
 
-      vm.urls = response.data.urls;
-      vm.videoinfos = response.data.infos;
+      if (vm.haveMP4) {
+        vm.urls = vm.mydata.urls;
+        vm.videoinfos = vm.mydata.infos;
 
-      vm.videos = [];
-      $.map(vm.urls, (o) => {
-        const videopiece = {
-          sources: [{
-            src: $sce.trustAsResourceUrl(o),
-            type: 'video/mp4'
-          }]
-        };
-        vm.videos.push(videopiece);
-      });
-      vm.config = {
-        preload: 'none',
-        autoPlay: false,
-        sources: vm.videos[0].sources,
-        theme: 'bower_components/videogular-themes-default/videogular.css',
-        plugins: {
-          controls: {
-            autoHide: true,
-            autoHideTime: 5000
+        vm.videos = [];
+        $.map(vm.urls, (o) => {
+          const videopiece = {
+            sources: [{
+              src: $sce.trustAsResourceUrl(o),
+              type: 'video/mp4'
+            }]
+          };
+          vm.videos.push(videopiece);
+        });
+        vm.config = {
+          preload: 'none',
+          autoPlay: false,
+          sources: vm.videos[0].sources,
+          theme: 'bower_components/videogular-themes-default/videogular.css',
+          plugins: {
+            controls: {
+              autoHide: true,
+              autoHideTime: 5000
+            }
           }
-        }
-      };
-      // $log.log('here', inLst(vm.myurl, vm.playlst));
-      vm.inlst = inLst(vm.myurl, vm.playlst);
+        };
+        vm.inlst = inLst(vm.myurl, vm.playlst);
+      } else {
+      } // endif vm.haveMP4
+
+
       vm.loadcomplete = true;
     }, () => {
       $log.log('post failure.');

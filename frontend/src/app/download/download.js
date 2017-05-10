@@ -11,8 +11,13 @@ Controller.$inject = ['$log', '$http', 'myService'];
 
 function Controller($log, $http, myService) {
   const vm = this;
-
-  ($.isEmptyObject(myService.get()))? (vm.myurl = 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html'):(vm.myurl = myService.get())
+  let global = {};
+  if (_.isEmpty(myService.get())) {
+    global = {'url': 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', 'playlist': []};
+  } else {
+    global = myService.get();
+  }
+  vm.myurl = global.url;
 
   vm.searched = false;
   vm.loadcomplete = false;
@@ -23,6 +28,8 @@ function Controller($log, $http, myService) {
   }
 
   vm.search = function () {
+    global.url = vm.myurl;
+    myService.set(global);
     // reset
     vm.loadcomplete = false;
     vm.success = false;

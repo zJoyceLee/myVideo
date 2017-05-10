@@ -23,13 +23,14 @@ function Controller($log, $http, myService) {
     $log.log('get failure.');
   });
 
-  vm.homesearch = function (i) {
-    $log.log('search', i);
-    // $state.go('online', {url: i});
-    myService.set(i);
-  };
-  vm.homedownload = function (i) {
-    $log.log('download', i);
-    myService.set(i);
+  vm.goto = function (i) {
+    $log.log('button click...');
+    if (_.isEmpty(myService.get())) {
+      myService.set({'url': i, 'playlist': []});
+    } else {
+      let global = myService.get();
+      global.url = i;
+      myService.set(global);
+    }
   };
 }
