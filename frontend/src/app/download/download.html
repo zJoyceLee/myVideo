@@ -67,7 +67,13 @@
               <!-- <td></td> -->
               <td>{{page.infos.streams[item].size}}</td>
               <td>
-                <button class="btn btn-xs" ng-click="page.download(item)">
+                <button class="btn btn-xs btn-danger" ng-click="page.cache(item, page.infos.streams[item].container)"
+                        ng-disabled="page.inCached(item, page.cached) || page.caching">
+                  <span class="glyphicon glyphicon-cloud-download"></span>
+                  Cache
+                </button>
+                <button class="btn btn-xs btn-primary" ng-click="page.download(item)"
+                        ng-disabled="!page.inCached(item, page.cached)">
                   <span class="glyphicon glyphicon-download"></span>
                   Download
                 </button>
