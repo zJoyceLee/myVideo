@@ -63,7 +63,10 @@ function Controller($log, $http, myService) {
     });
   };
   ($.isEmptyObject(myService.get())) || vm.search();
-  vm.check = function() {
+  vm.check = function () {
     $log.log(vm.infos);
-  }
+  };
+  vm.download = function (item) {
+    $log.log(item);
+  };
 }

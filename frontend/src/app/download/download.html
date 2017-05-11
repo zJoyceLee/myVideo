@@ -56,7 +56,8 @@
               <th>Option</th>
             </tr>
             <tr ng-repeat="item in page.streams | orderBy: 'page.infos.streams[item].size'">
-              <td><input type="checkbox" ng-model="page.infos.streams[item].checked" ng-click="page.check()"></td>
+              <!-- <td><input type="checkbox" ng-model="page.infos.streams[item].checked" ng-click="page.check()"></td> -->
+              <td>{{$index + 1}}</td>
               <td>
                 {{item}}
                 <span class="label label-primary flag">{{page.infos.streams[item].video_profile}}</span>
@@ -65,11 +66,16 @@
               <td>{{page.infos.streams[item].container}}</td>
               <!-- <td></td> -->
               <td>{{page.infos.streams[item].size}}</td>
-              <td><button class="btn btn-xs">Download</button></td>
+              <td>
+                <button class="btn btn-xs" ng-click="page.download(item)">
+                  <span class="glyphicon glyphicon-download"></span>
+                  Download
+                </button>
+              </td>
             </tr>
-
           </table>
           <!-- {{page.infos.streams}} -->
+
         </div>
 
       </div>
