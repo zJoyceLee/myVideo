@@ -79,20 +79,32 @@ class Serie():
         soup = BeautifulSoup(res.content)
         # series = soup.find(id='vpofficiallistv5_wrap')
         series = soup.find(id="Drama")
+        if (isinstance(series, type(None))):
+            return ret
         print('child----------start')
         counter = 0
         for child in series.children:
             print(child)
+            if counter == 0:
+                mylst_link = child
             counter = counter + 1
             if counter == 2:
                 serie = child
                 break
-        print('child----------end')
-        print(serie)
-        # content_lst = series.find_all(self.get_have_href_and_title)
+
         content_lst = serie.find_all('a')
+        # print(type(content_lst))
+        if len(content_lst) == 0:
+            a_of_mylst = mylst_link.find('a')
+            if (not isinstance(a_of_mylst, type(None))):
+                mylst = 'http:' + a_of_mylst.get('href')
+
+                playlst_res = requests.get(mylst)
+                playlst_soup = BeautifulSoup(playlst_res.content)
+                playlst = playlst_soup.find(id="playList")
+                content_lst = playlst.find_all('a')
+
         for x in content_lst:
-            print(x)
             dic = {}
             dic["title"] = x.get('title')
             href = x.get('href')
@@ -102,34 +114,20 @@ class Serie():
                 else:
                     dic["href"] = 'http:' + href
             dic["text"] = x.get_text()
-            ret.append(dic)
+
+            if not dic.get('text'):
+                dic["text"] = dic.get('title')
+            if not self.isDicInLst(dic, ret):
+                ret.append(dic)
         return ret
-#         if ('isinstance', isinstance(series, type(None))):
-#             series = soup.find(id="Drama")
-#             print(series)
-#             tmp = series.find_all(self.get_a_href_title)
-#             print('tmp', tmp)
-#         else:
-#             for child in series.children:
-#                 serie = child
-#                 break
-#             print(serie)
-#
-#             content_lst = serie.find_all('a')
-#             print(content_lst)
-#
-#             for x in content_lst:
-#                 dic = {}
-#                 dic["title"] = x.get('title')
-#                 href = x.get('href')
-#                 if len(href) > 5:
-#                     if href[:5] == 'http:':
-#                         dic["href"] = href
-#                     else:
-#                         dic["href"] = 'http:' + href
-#                         dic["text"] = x.get_text()
-#                         ret.append(dic)
-#         return ret
+    def isDicInLst(self, dic, lst):
+        assert dic.has_key('href')
+        href = dic.get('href')
+        tmp = [x.get('href') for x in lst]
+        if href in tmp:
+            return True
+        return False
+
 
 @app.route('/serie', methods = ['POST'])
 def serie():
