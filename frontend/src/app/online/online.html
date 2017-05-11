@@ -30,6 +30,7 @@
       </div>
       <loading ng-if="!page.complete && page.getting"></loading>
       <div class="panel-body" ng-if="page.complete">
+        <p><input type="text" placeholder="Search" ng-model="myfilter"></p>
         <button class="btn btn-xs btn-block" ng-class="item.href === page.myurl? 'btn-primary': 'btn-default'" ng-repeat="item in page.serie" ng-click="page.select(item.href)">
           {{ item.text }}
         </button>
@@ -61,8 +62,9 @@
           </button>
         </div>
         <loading ng-if="!page.complete && page.getting"></loading>
-        <div class="panel-body" ng-if="page.complete">
-          <button ng-class="item.href === page.myurl? 'btn btn-xs btn-primary': 'btn btn-xs btn-default'" ng-repeat="item in page.serie" ng-click="page.select(item.href)">
+        <div class="panel-body myscroll" ng-if="page.complete">
+          <p><input type="text" placeholder="Search" ng-model="myfilter"></p>
+          <button class="btn btn-xs" ng-class="item.href === page.myurl? 'btn-primary': 'btn-default'" ng-repeat="item in page.serie | filter: myfilter" ng-click="page.select(item.href)">
             {{ item.text }}
           </button>
         </div>
