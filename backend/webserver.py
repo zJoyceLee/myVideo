@@ -27,6 +27,7 @@ def test():
 
 def parseRelUrl(mystr):
     ret = {}
+    ret['haveMP4'] = True
     lst = mystr.split('\n')
     assert 'Real URLs:' in lst
     myindex = lst.index('Real URLs:')
@@ -52,13 +53,94 @@ def search():
         print('{}, [URL]{}'.format('get url from client post'.upper(), url))
 
         # handle url => real urls
-        result = subprocess.check_output(['python3', './you-get/you-get', '-u', '--format=mp4', url])
-        print(result)
-        data = parseRelUrl(result)
+        # result = subprocess.check_output(['python3', './you-get/you-get', '-u', '--format=mp4', url])
+        result = subprocess.check_output(['python3', './you-get/you-get', '--json', url])
+        info = json.loads(result)
+        mystream = info.get('streams')
 
-        print('{}'.format('get real url and info failed'.upper()))
+        if 'mp4' in mystream:
+            result = subprocess.check_output(['python3', './you-get/you-get', '-u', '--format=mp4', url])
+            return Response(json.dumps(parseRelUrl(result)), mimetype='application/json')
+        else:
+            return jsonify({'haveMP4': False, 'infos': 'Do not have MP4 source.'})
 
-        return Response(json.dumps(data),  mimetype='application/json')
+import requests
+from bs4 import BeautifulSoup
+
+class Serie():
+    def __init__(self, myurl):
+        self.url = myurl
+    def get_have_href_and_title(self, tag):
+        return tag.has_attr('href') and tag.has_attr('title')
+    def parse(self):
+        ret = []
+        # print('self.url', self.url)
+        res = requests.get(self.url)
+        soup = BeautifulSoup(res.content)
+        # series = soup.find(id='vpofficiallistv5_wrap')
+        series = soup.find(id="Drama")
+        print('child----------start')
+        counter = 0
+        for child in series.children:
+            print(child)
+            counter = counter + 1
+            if counter == 2:
+                serie = child
+                break
+        print('child----------end')
+        print(serie)
+        # content_lst = series.find_all(self.get_have_href_and_title)
+        content_lst = serie.find_all('a')
+        for x in content_lst:
+            print(x)
+            dic = {}
+            dic["title"] = x.get('title')
+            href = x.get('href')
+            if (not isinstance(href, type(None))):
+                if href[:5] == 'http:':
+                    dic["href"] = href
+                else:
+                    dic["href"] = 'http:' + href
+            dic["text"] = x.get_text()
+            ret.append(dic)
+        return ret
+#         if ('isinstance', isinstance(series, type(None))):
+#             series = soup.find(id="Drama")
+#             print(series)
+#             tmp = series.find_all(self.get_a_href_title)
+#             print('tmp', tmp)
+#         else:
+#             for child in series.children:
+#                 serie = child
+#                 break
+#             print(serie)
+#
+#             content_lst = serie.find_all('a')
+#             print(content_lst)
+#
+#             for x in content_lst:
+#                 dic = {}
+#                 dic["title"] = x.get('title')
+#                 href = x.get('href')
+#                 if len(href) > 5:
+#                     if href[:5] == 'http:':
+#                         dic["href"] = href
+#                     else:
+#                         dic["href"] = 'http:' + href
+#                         dic["text"] = x.get_text()
+#                         ret.append(dic)
+#         return ret
+
+@app.route('/serie', methods = ['POST'])
+def serie():
+    if request.method == 'POST':
+      url = request.json['url']
+      print(url)
+      s = Serie(url)
+      lst = s.parse()
+      print(lst)
+      return jsonify({'serie':lst})
+
 
 @app.route('/videoLst', methods=['GET'])
 def videoLst():
@@ -71,7 +153,7 @@ def videoLst():
         for item in coll.find():
             del item['_id']
             lst.append(item)
-        ret = [lst[i] for i in random.sample(range(len(lst)), 24)]
+        ret = [lst[i] for i in random.sample(range(len(lst)), 30)]
         return jsonify({'videos': ret})
     except:
         pass
@@ -86,7 +168,7 @@ def info():
         print('{}, [URL]{}'.format('get url from client post'.upper(), url))
 
         result = subprocess.check_output(['python3', './you-get/you-get', '--json', url])
-        print(result)
+        #  print(result)
 
         return jsonify({'infos': result})
 
