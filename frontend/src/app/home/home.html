@@ -1,14 +1,26 @@
-<div class="row">
-  <!-- <div class=""> -->
-    <div class="thumbnail col-sm-4 col-md-2" ng-repeat="item in page.lst">
-      <img src="{{ item.img }}" alt="{{ item.title }}" height="120px">
-      <div class="caption">
-        <p>
-          <button class="btn btn-xs btn-danger" ng-click="page.goto(item.href)" ui-sref="online">Online</button>
-          <button class="btn btn-xs btn-primary" ng-click="page.goto(item.href)" ui-sref="download">Download</button>
-        </p>
-        <p>{{ item.title }}</p>
-      </div>
+<div class="continer">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" ng-model="page.mywant">
+        <span class="input-group-btn">
+          <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+        </span>
+      </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+  </div><!-- /.row -->
+
+  <!-- loading -->
+  <loading ng-if="page.loading"></loading>
+
+  <div ng-if="!page.loading" class="thumbnail col-sm-4 col-md-2" ng-repeat="item in page.lst | filter: page.mywant">
+    <img src="{{ item.img }}" alt="{{ item.title }}" height="120px">
+    <div class="caption">
+      <p>
+        <button class="btn btn-xs btn-danger" ng-click="page.goto(item.href)" ui-sref="online">Online</button>
+        <button class="btn btn-xs btn-primary" ng-click="page.goto(item.href)" ui-sref="download">Download</button>
+      </p>
+      <p class="title-scroll">{{ item.title }}</p>
     </div>
-  <!-- </div> -->
-</div>
+  </div>
+</div><!-- /.continer -->
