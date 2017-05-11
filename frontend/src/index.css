@@ -13,3 +13,12 @@ body {
 .flag {
   font-size: 95%;
 }
+
+.myscroll {
+  height: 240px;
+  overflow-y: scroll;
+}
+.title-scroll {
+  height: 16px;
+  overflow-y: scroll;
+}
