@@ -95,7 +95,7 @@ function Controller($log, $http, myService) {
       vm.caching = false;
     });
   };
-  vm.download = function (item) {
+  vm.download = function (item, ext) {
     $log.log(item);
     $log.log(vm.myurl);
     $log.log(vm.cached);
@@ -107,36 +107,46 @@ function Controller($log, $http, myService) {
       data: {
         url: vm.myurl,
         format: item,
+        ext: ext,
         addr: vm.cached[item]['addr'],
         name: vm.cached[item]['name']
       }
     }).then((response) => {
-      let link = document.createElement("a");
-      link.download = 'data';
-      link.href = 'http://127.0.0.1:5000/download';
-      link.click();
+      $log.log('download post success...');
+      // $log.log(response.data);
+      $log.log(response);
+      $log.log(response.headers);
 
+      let contentType = '';
+      $log.log(ext);
+      if (ext === 'mp4') {
+        contentType = 'video/mp4';
+      } else if (ext === 'flv') {
+        contentType = 'video/x-flv';
+      }
+      $log.log('type', contentType);
+      download(response.data, vm.cached[item]['name'], contentType);
     }, () => {
       $log.log('download post failure...');
     });
-
-
-    // $http({
-    //   method: 'POST',
-    //   url: 'http://127.0.0.1:5000/download',
-    //   data: {
-    //     url: vm.myurl,
-    //     format: item
-    //   }
-    // }).then((response) => {
-    //   // $log.log(response.data);
-    //   let link = document.createElement("a");
-    //   link.download = 'data';
-    //   link.href = 'http://127.0.0.1:5000/download';
-    //   link.click();
-
-    // }, () => {
-    //   $log.log('download post failure...');
-    // });
   };
 }
+
+function download(data, filename, type) {
+  var file = new Blob([data], {type: type});
+  if (window.navigator.msSaveOrOpenBlob) // IE10+
+      window.navigator.msSaveOrOpenBlob(file, filename);
+  else { // Others
+      var a = document.createElement("a"),
+              url = URL.createObjectURL(file);
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function() {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+      }, 0);
+  }
+}
+

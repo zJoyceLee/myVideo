@@ -5,35 +5,41 @@ import re
 import subprocess
 from flask import Flask, request, redirect, url_for, jsonify, Response
 from flask_cors import CORS
+import os
+
+# UPLOAD_FOLDER  = '/media/joyce/Joyce/Download'
+# ALLOWED_EXTENSIONS = set(['mp4', 'flv'])
+
 app = Flask(__name__)
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
-from flask_login import LoginManager
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    # Here we use a class of some kind to represent and validate our
-    # client-side form data. For example, WTForms is a library that will
-    # handle this for us, and we use a custom LoginForm to validate.
-    form = LoginForm()
-    if form.validate_on_submit():
-        # Login and validate the user.
-        # user should be an instance of your `User` class
-        login_user(user)
-
-        flask.flash('Logged in successfully.')
-
-        next = flask.request.args.get('next')
-        # is_safe_url should check if the url is safe for redirects.
-        # See http://flask.pocoo.org/snippets/62/ for an example.
-        if not is_safe_url(next):
-            return flask.abort(400)
-
-        return flask.redirect(next or flask.url_for('index'))
-    return flask.render_template('login.html', form=form)
+# from flask_login import LoginManager
+#
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+#
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     # Here we use a class of some kind to represent and validate our
+#     # client-side form data. For example, WTForms is a library that will
+#     # handle this for us, and we use a custom LoginForm to validate.
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         # Login and validate the user.
+#         # user should be an instance of your `User` class
+#         login_user(user)
+#
+#         flask.flash('Logged in successfully.')
+#
+#         next = flask.request.args.get('next')
+#         # is_safe_url should check if the url is safe for redirects.
+#         # See http://flask.pocoo.org/snippets/62/ for an example.
+#         if not is_safe_url(next):
+#             return flask.abort(400)
+#
+#         return flask.redirect(next or flask.url_for('index'))
+#     return flask.render_template('login.html', form=form)
 
 
 
@@ -234,12 +240,24 @@ def cache():
 @app.route('/download', methods=['POST'])
 def download():
     if request.method == 'POST':
-        url = request.json['url']
-        videoFormat = request.json['format']
-        addr = request.json['addr']
-        name = request.json['name']
-
-        return jsonify({'data': 'hello'})
+        url = request.json['url'].encode('utf-8')
+        videoFormat = request.json['format'].encode('utf-8')
+        addr = request.json['addr'].encode('utf-8')
+        name = request.json['name'].encode('utf-8')
+        ext = request.json['ext'].encode('utf-8')
+        print(url, videoFormat, addr, name)
+        path =  '{}/{}'.format(addr, name)
+        print(path)
+        def generate():
+            with open(path, 'rb') as f:
+                data = f.readlines()
+                for line in data:
+                    yield line
+        if ext == 'mp4':
+            return  Response(generate(), mimetype="video/mp4")
+        elif ext == 'flv':
+            return Response(generate(), mimetype="video/x-flv")
+        # return jsonify({'data': 'hello'})
 
 
 if __name__ == "__main__":

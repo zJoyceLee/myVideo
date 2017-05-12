@@ -72,7 +72,7 @@
                   <span class="glyphicon glyphicon-cloud-download"></span>
                   Cache
                 </button>
-                <button class="btn btn-xs btn-primary" ng-click="page.download(item)"
+                <button class="btn btn-xs btn-primary" ng-click="page.download(item, page.infos.streams[item].container)"
                         ng-disabled="!page.inCached(item, page.cached)">
                   <span class="glyphicon glyphicon-download"></span>
                   Download
