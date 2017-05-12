@@ -1,24 +1,36 @@
 <div class="continer">
   <div class="row">
-    <div class="col-lg-6">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search" ng-model="page.mywant">
-        <span class="input-group-btn">
-          <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+    <div ng-if="!page.loading">
+      <div class="col-lg-8">
+        <span>
+          <button ng-click="page.category = ''" class="btn btn-link">All</button>
         </span>
-      </div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-  </div><!-- /.row -->
+        <span ng-repeat="item in page.categories">
+          <button ng-click="page.category = item" class="btn btn-link" >{{ item }}</button>
+        </span>
+      </div>
+      <div class="col-lg-4">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search" ng-model="page.mywant">
+          <span class="input-group-btn">
+            <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+          </span>
+        </div><!-- /input-group -->
+      </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
+    </div>
+
 
   <!-- loading -->
   <loading ng-if="page.loading"></loading>
 
-  <div ng-if="!page.loading" class="thumbnail col-sm-4 col-md-2" ng-repeat="item in page.lst | filter: page.mywant">
+  <div ng-if="!page.loading" class="thumbnail col-sm-4 col-md-2" ng-repeat="item in page.videos | filter: page.mywant | filter: page.category">
     <img src="{{ item.img }}" alt="{{ item.title }}" height="120px">
     <div class="caption">
       <p>
-        <button class="btn btn-xs btn-danger" ng-click="page.goto(item.href)" ui-sref="online">Online</button>
-        <button class="btn btn-xs btn-primary" ng-click="page.goto(item.href)" ui-sref="download">Download</button>
+        <button class="btn btn-xs btn-danger" ng-click="page.goto(item.href)" ui-sref="online"><span class="glyphicon glyphicon-play"></span></button>
+        <button class="btn btn-xs btn-primary" ng-click="page.goto(item.href)" ui-sref="download"><span class="glyphicon glyphicon-download-alt"></span></button>
+        <span class="pull-right">{{ item.tag }}</span>
       </p>
       <p class="title-scroll">{{ item.title }}</p>
     </div>

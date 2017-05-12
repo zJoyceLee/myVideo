@@ -18,7 +18,8 @@ function Controller($log, $http, myService) {
     $log.log('get success');
     $log.log(response.data);
 
-    vm.lst = response.data.videos;
+    vm.videos = response.data.videos;
+    vm.categories = response.data.categories;
     vm.loading = false;
   }, () => {
     $log.log('get failure.');

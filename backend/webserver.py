@@ -166,11 +166,18 @@ def videoLst():
         coll = db.dataset
         "db.dataset.aggregate([{$sample:{size:3}}])"
         lst = []
+        tag = []
         for item in coll.find():
             del item['_id']
+            mytag = item.get('tag')
+            if mytag not in tag and (not isinstance(mytag, type(None))) and mytag != '':
+                tag.append(item.get('tag'))
             lst.append(item)
-        ret = [lst[i] for i in random.sample(range(len(lst)), 30)]
-        return jsonify({'videos': ret})
+        # ret = [lst[i] for i in random.sample(range(len(lst)), 30)]
+        ret = lst
+        for i in tag:
+            print(i)
+        return jsonify({'videos': ret, 'categories': tag})
     except:
         pass
     if request.method == 'GET':
