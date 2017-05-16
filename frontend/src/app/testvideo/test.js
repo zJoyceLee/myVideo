@@ -1,5 +1,5 @@
 'use strict';
-angular.module('app.test',[]
+angular.module('app.test', []
 )
 .component('test', {
   templateUrl: 'app/testvideo/test.html',

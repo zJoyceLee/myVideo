@@ -13,7 +13,7 @@ function Controller($log, $http, myService) {
   const vm = this;
   let global = {};
   if (_.isEmpty(myService.get())) {
-    global = {'url': 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', 'playlist': []};
+    global = {url: 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', playlist: []};
   } else {
     global = myService.get();
   }
@@ -31,11 +31,11 @@ function Controller($log, $http, myService) {
     if (_.isEmpty(myobj)) {
       return false;
     }
-    if (myobj.hasOwnProperty(item)) {
+    // if (myobj.hasOwnProperty(item))
+    if (_.has(myobj, item)) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   };
 
   vm.search = function () {
@@ -55,10 +55,10 @@ function Controller($log, $http, myService) {
       }
     }).then((response) => {
       $log.log('post success');
-      vm.cached = JSON.parse(response.data.record);
+      vm.cached = angular.fromJson(response.data.record);
       $log.log(vm.cached);
 
-      vm.infos = JSON.parse(response.data.infos);
+      vm.infos = angular.fromJson(response.data.infos);
       vm.streams = _.keysIn(vm.infos.streams);
       $log.log(vm.infos);
       vm.success = true;
@@ -108,8 +108,8 @@ function Controller($log, $http, myService) {
         url: vm.myurl,
         format: item,
         ext: ext,
-        addr: vm.cached[item]['addr'],
-        name: vm.cached[item]['name']
+        addr: vm.cached[item].addr,
+        name: vm.cached[item].name
       }
     }).then((response) => {
       $log.log('download post success...');
@@ -125,7 +125,7 @@ function Controller($log, $http, myService) {
         contentType = 'video/x-flv';
       }
       $log.log('type', contentType);
-      download(response.data, vm.cached[item]['name'], contentType);
+      download(response.data, vm.cached[item].name, contentType);
     }, () => {
       $log.log('download post failure...');
     });
@@ -133,20 +133,19 @@ function Controller($log, $http, myService) {
 }
 
 function download(data, filename, type) {
-  var file = new Blob([data], {type: type});
-  if (window.navigator.msSaveOrOpenBlob) // IE10+
-      window.navigator.msSaveOrOpenBlob(file, filename);
-  else { // Others
-      var a = document.createElement("a"),
-              url = URL.createObjectURL(file);
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(function() {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-      }, 0);
+  const file = new Blob([data], {type: type});
+  if (window.navigator.msSaveOrOpenBlob) { // IE10+
+    window.navigator.msSaveOrOpenBlob(file, filename);
+  } else { // Others
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 0);
   }
 }
-

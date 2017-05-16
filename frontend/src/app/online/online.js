@@ -19,7 +19,7 @@ function Controller($sce, $timeout, $http, $log, myService) {
   vm.getting = false;
   let global = {};
   if (_.isEmpty(myService.get())) {
-    global = {'url': 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', 'serie': []};
+    global = {url: 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', serie: []};
   } else {
     global = myService.get();
   }
@@ -86,7 +86,7 @@ function Controller($sce, $timeout, $http, $log, myService) {
   };
   vm.change = function () {
     vm.searched = false;
-  }
+  };
   vm.search = function () {
     global.url = vm.myurl;
     myService.set(global);
@@ -148,7 +148,6 @@ function Controller($sce, $timeout, $http, $log, myService) {
         };
         vm.inlst = inLst(vm.myurl, vm.playlst);
       } // endif vm.haveMP4
-
 
       vm.loadcomplete = true;
     }, () => {

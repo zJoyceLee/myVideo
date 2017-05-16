@@ -29,9 +29,9 @@ function Controller($log, $http, myService) {
   vm.goto = function (i) {
     $log.log('button click...');
     if (_.isEmpty(myService.get())) {
-      myService.set({'url': i, 'playlist': []});
+      myService.set({url: i, serie: []});
     } else {
-      let global = myService.get();
+      const global = myService.get();
       global.url = i;
       myService.set(global);
     }

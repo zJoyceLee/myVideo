@@ -7,8 +7,7 @@ angular.module('app')
   controllerAs: 'page'
 });
 
-Controller.$inject = ['$log'];
+Controller.$inject = [];
 
-function Controller($log) {
-  const vm = this;
+function Controller() {
 }
