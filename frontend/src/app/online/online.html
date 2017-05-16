@@ -42,7 +42,7 @@
   <div class="row" ng-if="page.success && page.haveMP4">
   <!-- <div class="row"> -->
     <!-- infos -->
-    <div class="col-lg-3 col-sm-3" ng-if="page.success" >
+    <div class="col-lg-3 col-sm-3 col-xs-4" ng-if="page.success" >
       <div class="panel panel-success">
         <div class="panel-heading">
           This is Search Result
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <div class="videogular-container col-lg-9 col-sm-9">
+    <div class="videogular-container col-lg-9 col-sm-9 col-xs-8">
       <videogular vg-theme="page.config.theme" vg-player-ready="page.onPlayerReady($API)" vg-complete="page.onCompleteVideo()">
         <vg-media vg-src="page.config.sources" vg-dash></vg-media>
 
