@@ -20,6 +20,10 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
       url: '/',
       component: 'home'
     })
+    .state('stats', {
+      url: '/stats',
+      component: 'stats'
+    })
     .state('online', {
       url: '/online',
       component: 'online'
