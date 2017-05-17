@@ -12,6 +12,7 @@ function inject() {
   const injectStyles = gulp.src([
     conf.path.src('../bower_components/**/*.css'),
     conf.path.src('**/*.css'),
+    `!${conf.path.src('../bower_components/js-md5/**/*.css')}`,
     `!${conf.path.src('../bower_components/lodash/**/*.*.css')}`,
     `!${conf.path.src('../bower_components/lodash/**/*.css')}`
   ], {read: false});
