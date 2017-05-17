@@ -13,6 +13,7 @@
         <h2>登录</h2>
         <input type="text" class="form-control" placeholder="Username" required="" autofocus="" ng-model="page.username">
         <input type="password" class="form-control" placeholder="Password" required="" ng-model="page.passwd">
+        <div class="bg-danger" ng-if="page.wrongpasswd">密码错误.</div>
         <!-- <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me" ng-model="page.remember">Remember me
@@ -27,7 +28,7 @@
 
         <input type="password" class="form-control" placeholder="Password" required="" ng-model="page.passwd">
         <input type="password" class="form-control" placeholder="ConfirmPassword" required="" ng-model="page.confirmpasswd">
-        <div class="bg-danger" ng-if="page.passwd !== page.confirmpasswd">Password don't match.</div>
+        <div class="bg-danger" ng-if="page.passwd !== page.confirmpasswd">密码不匹配.</div>
         <div class="input-group">
           <label>性别</label> &nbsp
           <input type="radio" name="gender" required="" value="female" ng-model="page.gender"><span class="fa fa-female"></span> &nbsp

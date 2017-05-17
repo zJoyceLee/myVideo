@@ -28,9 +28,38 @@ def login():
         record = coll.find_one({'username': username})
         if not isinstance(record, type(None)):
             print(record)
-            ret = {'isExist': True}
+            if (record.get('passwd') == passwd):
+                ret = {'isExist': True, 'identify': True}
+            else:
+                ret = {'isExist': True, 'identify': False}
         else:
+            ret = {'isExist': False, 'identify': False}
+        return jsonify(ret)
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        ret = {}
+        username = request.json['username']
+        passwd = request.json['passwd']
+        gender = request.json['gender']
+        age = request.json['age']
+        print(username, passwd, gender, age)
+        client = MongoClient('172.17.0.1', 27017)
+        db = client.myVideo
+        coll = db.user
+        print('coll', coll)
+        record = coll.find_one({'username': username})
+        print(record)
+        if isinstance(record, type(None)):
+            coll.insert({
+                'username': username,
+                'passwd': passwd,
+                'gender': gender,
+                'age': age
+            })
             ret = {'isExist': False}
+        else:
+            ret = {'isExist': True}
         return jsonify(ret)
 
 # from flask_login import LoginManager
