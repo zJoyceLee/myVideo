@@ -1,40 +1,60 @@
 from pymongo import MongoClient
 import json
 import random
-import re
-import subprocess
-from flask import Flask, request, redirect, url_for, jsonify, Response
-from flask_cors import CORS
 import os
+# import re
+import subprocess
+from flask import Flask, request, jsonify, Response, session
+from flask_cors import CORS
+
+from flask_pymongo import PyMongo
+from flask_mongo_sessions import MongoDBSessionInterface
 
 # UPLOAD_FOLDER  = '/media/joyce/Joyce/Download'
 # ALLOWED_EXTENSIONS = set(['mp4', 'flv'])
 
 app = Flask(__name__)
+app.config['MONGO_DBNAME'] = 'database-name'
+mongo = PyMongo(app)
+with app.app_context():
+    app.session_interface = MongoDBSessionInterface(app, mongo.db, 'sessions')
+
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
-@app.route('/login', methods = ['GET', 'POST'])
+@app.route('/login', methods = ['POST'])
 def login():
     if request.method == 'POST':
         ret = {}
         username = request.json['username']
         passwd = request.json['passwd']
-        print(username, passwd)
-        # return redirect('videoLst')
+
         client = MongoClient('172.17.0.1', 27017)
         db = client.myVideo
         coll = db.user
         record = coll.find_one({'username': username})
+
         if not isinstance(record, type(None)):
-            print(record)
             if (record.get('passwd') == passwd):
-                ret = {'isExist': True, 'identify': True}
+                session['logged_in'] = True
+                session['username'] = username
+                ret = {
+                    'isExist': True,
+                    'identify': True,
+                    'user': {
+                        'username': username,
+                        'gender': record.get('gender'),
+                        'age': record.get('age')
+                    }
+                }
             else:
-                ret = {'isExist': True, 'identify': False}
+                session['logged_in'] = False
+                ret = {'isExist': True, 'identify': False, 'user': {}}
         else:
-            ret = {'isExist': False, 'identify': False}
+            ret = {'isExist': False, 'identify': False, 'user': {}}
+        print(session)
         return jsonify(ret)
+
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -47,7 +67,6 @@ def register():
         client = MongoClient('172.17.0.1', 27017)
         db = client.myVideo
         coll = db.user
-        print('coll', coll)
         record = coll.find_one({'username': username})
         print(record)
         if isinstance(record, type(None)):
@@ -57,38 +76,18 @@ def register():
                 'gender': gender,
                 'age': age
             })
-            ret = {'isExist': False}
+            ret = {'isExist': False, 'identify': False}
         else:
-            ret = {'isExist': True}
+            ret = {'isExist': True, 'identify': False}
         return jsonify(ret)
 
-# from flask_login import LoginManager
-#
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-#
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     # Here we use a class of some kind to represent and validate our
-#     # client-side form data. For example, WTForms is a library that will
-#     # handle this for us, and we use a custom LoginForm to validate.
-#     form = LoginForm()
-#     if form.validate_on_submit():
-#         # Login and validate the user.
-#         # user should be an instance of your `User` class
-#         login_user(user)
-#
-#         flask.flash('Logged in successfully.')
-#
-#         next = flask.request.args.get('next')
-#         # is_safe_url should check if the url is safe for redirects.
-#         # See http://flask.pocoo.org/snippets/62/ for an example.
-#         if not is_safe_url(next):
-#             return flask.abort(400)
-#
-#         return flask.redirect(next or flask.url_for('index'))
-#     return flask.render_template('login.html', form=form)
-
+@app.route('/stats')
+def stats():
+    print(session)
+    if not session.get('logged_in'):
+        return "Please Sign in..."
+    else:
+        return "Hello User"
 
 
 def parseRelUrl(mystr):
@@ -147,10 +146,10 @@ class Serie():
         series = soup.find(id="Drama")
         if (isinstance(series, type(None))):
             return ret
-        print('child----------start')
+        # print('child----------start')
         counter = 0
         for child in series.children:
-            print(child)
+            # print(child)
             if counter == 0:
                 mylst_link = child
             counter = counter + 1
@@ -202,7 +201,7 @@ def serie():
       print(url)
       s = Serie(url)
       lst = s.parse()
-      print(lst)
+      # print(lst)
       return jsonify({'serie':lst})
 
 
@@ -223,8 +222,6 @@ def videoLst():
             lst.append(item)
         # ret = [lst[i] for i in random.sample(range(len(lst)), 30)]
         ret = lst
-        for i in tag:
-            print(i)
         return jsonify({'videos': ret, 'categories': tag})
     except:
         pass
@@ -316,4 +313,5 @@ def download():
 
 
 if __name__ == "__main__":
+    app.secret_key = os.urandom(12)
     app.run()

@@ -1,6 +1,16 @@
 <div class="container">
   <div class="col-lg-4 col-sm-3"></div>
-  <div class="col-lg-4 col-sm-6">
+  <!-- After Login -->
+  <div class="col-lg-4 col-sm-6" ng-if="page.alreadylogin">
+    <form>
+      <h2>{{ page.username }} 用户信息</h2>
+      <input type="text" class="form-control" ng-disabled="true" ng-model="page.gender">
+      <input type="text" class="form-control" ng-disabled="true" ng-model="page.age">
+      <button class="btn btn-danger btn-block" type="submit" ng-click="page.logout()">注销</button>
+
+    </form>
+  </div> <!-- /After Login -->
+  <div class="col-lg-4 col-sm-6" ng-if="!page.alreadylogin">
     <div class="pull-right">
       <button class="btn btn-link" ng-disabled="page.isRegister" ng-click="page.switch()">注册</button>
       <span>/</span>
@@ -25,6 +35,7 @@
       <div ng-if="page.isRegister">
         <h2>注册</h2>
         <input type="text" class="form-control" placeholder="Username" required="" autofocus="" ng-model="page.username">
+        <div class="bg-danger" ng-if="page.existuser">用户名已被使用</div>
 
         <input type="password" class="form-control" placeholder="Password" required="" ng-model="page.passwd">
         <input type="password" class="form-control" placeholder="ConfirmPassword" required="" ng-model="page.confirmpasswd">
