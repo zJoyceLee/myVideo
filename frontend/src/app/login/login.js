@@ -13,8 +13,8 @@ function encrypt(str) {
   return hash.hex();
 }
 
-Controller.$inject = ['$log', '$http'];
-function Controller($log, $http) {
+Controller.$inject = ['$log', '$http', '$window'];
+function Controller($log, $http, $window) {
   const vm = this;
   vm.isRegister = false;
   vm.switch = function () {
@@ -34,8 +34,14 @@ function Controller($log, $http) {
         username: vm.username,
         passwd: encrypt(vm.passwd)
       }
-    }).then(() => {
-
+    }).then((response) => {
+      $log.log(response);
+      // $window.location.href = '/home';
+      if (response.data.isExist === true) {
+        $window.location.href = '/home';
+      } else {
+        vm.isRegister = true;
+      }
     }, () => {
 
     });

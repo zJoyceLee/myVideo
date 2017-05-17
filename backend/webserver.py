@@ -14,6 +14,25 @@ app = Flask(__name__)
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        ret = {}
+        username = request.json['username']
+        passwd = request.json['passwd']
+        print(username, passwd)
+        # return redirect('videoLst')
+        client = MongoClient('172.17.0.1', 27017)
+        db = client.myVideo
+        coll = db.user
+        record = coll.find_one({'username': username})
+        if not isinstance(record, type(None)):
+            print(record)
+            ret = {'isExist': True}
+        else:
+            ret = {'isExist': False}
+        return jsonify(ret)
+
 # from flask_login import LoginManager
 #
 # login_manager = LoginManager()
