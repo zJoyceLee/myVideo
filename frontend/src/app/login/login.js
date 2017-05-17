@@ -7,6 +7,12 @@ angular.module('app')
     controllerAs: 'page'
   });
 
+function encrypt(str) {
+  const hash = md5.create();
+  hash.update(str);
+  return hash.hex();
+}
+
 Controller.$inject = ['$log', '$http'];
 function Controller($log, $http) {
   const vm = this;
@@ -26,7 +32,7 @@ function Controller($log, $http) {
       url: 'http://127.0.0.1:5000/login',
       data: {
         username: vm.username,
-        passwd: vm.passwd
+        passwd: encrypt(vm.passwd)
       }
     }).then(() => {
 
@@ -37,7 +43,7 @@ function Controller($log, $http) {
   vm.register = function () {
     $log.log(vm.gender, vm.age);
     // vm.isRegister = true;
-    if (!_.isEmpty(vm.username) && !_.isEmpty(vm.passwd)  && (vm.gender!==false)  && !_.isEmpty(vm.age) && _.isEqual(vm.passwd, vm.confirmpasswd)) {
+    if (!_.isEmpty(vm.username) && !_.isEmpty(vm.passwd) && (vm.gender!==false) && !_.isEmpty(vm.age) && _.isEqual(vm.passwd, vm.confirmpasswd)) {
       $log.log(vm.username, vm.passwd, vm.confirmpasswd, vm.gender, vm.age);
       // $http({
       //   method: 'POST',
