@@ -1,3 +1,12 @@
 <div class="container">
-  <h1 class="text-center">Hi, {{ page.user.username }}</h1>
+  <h2 class="text-center">Hi, {{ page.user.username }}</h2>
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
+      <canvas id="base" class="chart-base" chart-type="page.type"
+        chart-data="page.data" chart-labels="page.labels" >
+      </canvas>
+    </div>
+  </div>
+
+
 </div>
