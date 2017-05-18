@@ -12,7 +12,7 @@ Controller.$inject = ['$log', '$http', 'myService'];
 function Controller($log, $http, myService) {
   const vm = this;
   let global = {};
-  if (_.isEmpty(myService.get())) {
+  if (_.isEmpty(myService.get()) || _.isEmpty(myService.get().url)) {
     global = {url: 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', playlist: []};
   } else {
     global = myService.get();

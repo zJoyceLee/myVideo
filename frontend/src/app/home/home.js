@@ -10,6 +10,8 @@ Controller.$inject = ['$log', '$http', 'myService'];
 
 function Controller($log, $http, myService) {
   const vm = this;
+  const global = myService.get();
+  $log.log(global);
   vm.loading = true;
   $http({
     method: 'GET',
@@ -28,10 +30,11 @@ function Controller($log, $http, myService) {
 
   vm.goto = function (i) {
     $log.log('button click...');
-    if (_.isEmpty(myService.get())) {
-      myService.set({url: i, serie: []});
+    if (_.isEmpty(global)) {
+      global.url = i;
+      global.serie = [];
+      myService.set(global);
     } else {
-      const global = myService.get();
       global.url = i;
       myService.set(global);
     }

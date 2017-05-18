@@ -18,7 +18,7 @@ function Controller($sce, $timeout, $http, $log, myService) {
   const vm = this;
   vm.getting = false;
   let global = {};
-  if (_.isEmpty(myService.get())) {
+  if (_.isEmpty(myService.get()) || _.isEmpty(myService.get().url)) {
     global = {url: 'http://v.youku.com/v_show/id_XMjY3MTQ2MDE0OA==.html', serie: []};
   } else {
     global = myService.get();
