@@ -17,6 +17,7 @@
     "videogular-overlay-play": "^1.4.4",
     "videogular-buffering": "^1.4.4",
     "components-font-awesome": "^4.7.0",
-    "js-md5": "md5#^0.4.2"
+    "js-md5": "md5#^0.4.2",
+    "angular-chart.js": "^1.1.1"
   }
 }
