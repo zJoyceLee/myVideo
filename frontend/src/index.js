@@ -9,8 +9,13 @@
     'com.2fdevs.videogular.plugins.overlayplay',
     'com.2fdevs.videogular.plugins.buffering',
     // 'com.2fdevs.videogular.plugins.poster'
+    'chart.js',
 
     'app.online',
+    'app.download',
+    'app.home',
+    'app.login',
+    'app.stats',
     'app.test'
   ])
   .factory('myService', function () {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app')
+angular.module('app.download', [])
 .component('download', {
   templateUrl: 'app/download/download.html',
   controller: Controller,
