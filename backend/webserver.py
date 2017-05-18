@@ -2,22 +2,23 @@ from pymongo import MongoClient
 import json
 import random
 import os
+import datetime
 # import re
 import subprocess
 from flask import Flask, request, jsonify, Response, session
 from flask_cors import CORS
 
-from flask_pymongo import PyMongo
-from flask_mongo_sessions import MongoDBSessionInterface
+# from flask_pymongo import PyMongo
+# from flask_mongo_sessions import MongoDBSessionInterface
 
 # UPLOAD_FOLDER  = '/media/joyce/Joyce/Download'
 # ALLOWED_EXTENSIONS = set(['mp4', 'flv'])
 
 app = Flask(__name__)
-app.config['MONGO_DBNAME'] = 'database-name'
-mongo = PyMongo(app)
-with app.app_context():
-    app.session_interface = MongoDBSessionInterface(app, mongo.db, 'sessions')
+# app.config['MONGO_DBNAME'] = 'database-name'
+# mongo = PyMongo(app)
+# with app.app_context():
+#     app.session_interface = MongoDBSessionInterface(app, mongo.db, 'sessions')
 
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
@@ -207,6 +208,8 @@ def serie():
 
 @app.route('/videoLst', methods=['GET'])
 def videoLst():
+    end = datetime.datetime.utcnow()
+    start = datetime.datetime(end.year, end.month, end.day)
     try:
         client = MongoClient('172.17.0.1', 27017)
         db = client.myVideo
@@ -214,7 +217,7 @@ def videoLst():
         "db.dataset.aggregate([{$sample:{size:3}}])"
         lst = []
         tag = []
-        for item in coll.find():
+        for item in coll.find({"date": {"$gte": start, "$lt": end}}):
             del item['_id']
             mytag = item.get('tag')
             if mytag not in tag and (not isinstance(mytag, type(None))) and mytag != '':
