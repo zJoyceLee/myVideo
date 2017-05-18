@@ -29,37 +29,40 @@ class Spider():
             return 'No'
         return tag.get('content')
 
-    def parseYouku(self, collection):
-        # res = requests.get(self.url)
-        # soup = BeautifulSoup(res.content)
-        content_lst = self.soup.find_all(attrs = {"target": "video"})
+    def parseUrl(self, url):
+        ret = url
+        if len(url) > 0:
+            if url[:2] == '//':
+                ret = 'https:' + url
+            elif url[:6] == 'https:':
+                pass
+        return ret
 
+    def parseYouku(self, collection):
+        content_lst = self.soup.find_all(attrs = {"target": "video"})
         for x in content_lst:
             dic = {}
             myimg = x.find_next_sibling("img")
             if not myimg:
                 continue
-            alt = myimg.get('alt')
-            if alt[:2] == '//':
-                alt = 'https:{}'.format(alt)
+            alt = self.parseUrl(myimg.get('alt'))
+            href = self.parseUrl(x.get('href'))
             dic['img'] = alt
             dic['title'] = x.get('title')
-            dic['href'] = x.get('href')
-            dic['tag'] = self.getVideoTag(dic.get('href'))
+
+            dic['tag'] = self.getVideoTag(href)
             dic['date'] = datetime.datetime.utcnow()
 
-            print('\\\\\\\\\\\\\\\\\\\\')
             print(dic.get('title'))
-            print(dic.get('tag'))
-            print(dic.get('date'))
-            print('====================')
+            print(dic.get('img'))
 
             try:
-                collection.insert(dic)
+                collection.update({'href': href},{"$set": dic}, upsert=True)
                 print('insert records successful\n'.upper())
             except:
                 print('collection insert error.\n'.upper())
                 sys.exit()
+
     def parseSymbol(self, s):
         ret = s.replace('&amp;quot;', '"')
         ret = ret.replace('&amp;lt;', '')
@@ -70,9 +73,6 @@ class Spider():
         return ret
 
     def parseLazyContent(self, collection):
-        # href = re.compile(r'href=&quot;\.&quot')
-        # mystr = 'href=&quot;http://hello&quothref=&quot;http://world&quot'
-        # print(href.findall(mystr))
         content_lst = self.soup.find_all(attrs = {"class": "lazyContent"})
         for x in content_lst:
             print(type(x))
@@ -90,10 +90,7 @@ class Spider():
                         if item[:5] == 'title':
                             dic['title'] = self.parseSymbol(item[7:])
                         if item[:3] == 'alt':
-                            if item[5: 7] == '//':
-                                dic['img'] = 'https:' + item[5: -1]
-                            elif item[5: 11] == 'https:':
-                                dic['img'] = item[5: -1]
+                            dic['img'] = self.parseUrl(item[5: -1])
 
                 if not (isinstance(dic.get('img'), type(None)) or isinstance(dic.get('href'), type(None))):
                     dic['tag'] = self.getVideoTag(dic.get('href'))
@@ -102,17 +99,14 @@ class Spider():
                     key = {'href': href}
                     dic.pop(href, None)
 
+                    print(dic.get('title'))
+                    print(dic.get('img'))
                     try:
                         collection.update(key,{"$set":dic}, upsert=True)
                         print('insert records successful\n'.upper())
                     except:
                         print('collection insert error.\n'.upper())
                         sys.exit()
-
-                    # print('dic++++++++++\n{}\n++++++++++dic end'.format(dic))
-                    print(dic.get('title'))
-                    print(dic.get('img'))
-
 
 def foo():
     client = MongoClient('172.17.0.1', 27017)
@@ -123,8 +117,3 @@ def foo():
     s.parseLazyContent(coll)
 
 foo()
-# try:
-#     foo()
-# except:
-#     print('xxx'.upper())
-#     sys.exit()
