@@ -19,8 +19,14 @@ function inject() {
   const injectScripts = gulp.src([
     conf.path.tmp('**/*.js'),
     `!${conf.path.tmp('**/*.spec.js')}`,
+    //
     conf.path.src('../bower_components/**/*.min.js'),
+
+    `!${conf.path.src('../bower_components/jquery/**.**')}`,
+    `!${conf.path.src('../bower_components/chart.js/**.**')}`,
+
     `!${conf.path.src('../bower_components/angular/**/*.js')}`,
+    `!${conf.path.src('../bower_components/angular-ui-router/**/*.*.js')}`,
     `!${conf.path.src('../bower_components/lodash/**/*.*.js')}`
   ])
   .pipe(angularFilesort()).on('error', conf.errorHandler('AngularFilesort'));
