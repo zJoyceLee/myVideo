@@ -85,10 +85,14 @@ def register():
 @app.route('/stats')
 def stats():
     print(session)
-    if not session.get('logged_in'):
-        return "Please Sign in..."
-    else:
-        return "Hello User"
+    client = MongoClient('172.17.0.1', 27017)
+    db = client.myVideo
+    coll = db.dataset
+
+    # if not session.get('logged_in'):
+    #     return "Please Sign in..."
+    # else:
+    #     return "Hello User"
 
 
 def parseRelUrl(mystr):
@@ -112,11 +116,29 @@ def parseRelUrl(mystr):
     ret['urls'] = url_lst
     return ret
 
+def counter():
+    pass
+
 @app.route('/search', methods = ['POST'])
 def search():
     if request.method == 'POST':
         url = request.json['url']
         print('{}, [URL]{}'.format('get url from client post'.upper(), url))
+
+        client = MongoClient('172.17.0.1', 27017)
+        db = client.myVideo
+        coll = db.dataset
+        key = {'href': url}
+        for record in  coll.find(key):
+            counter = 1
+            if not isinstance(record, type(None)):
+                counter = record.get('counter')
+                if not isinstance(counter, type(None)):
+                    counter = counter + random.randint(20, 30)
+                else:
+                    counter = 1
+            print(counter)
+            coll.update(key, {"$set": {'counter': counter}}, upsert=True)
 
         # handle url => real urls
         # result = subprocess.check_output(['python3', './you-get/you-get', '-u', '--format=mp4', url])
@@ -210,6 +232,7 @@ def serie():
 def videoLst():
     end = datetime.datetime.utcnow()
     start = datetime.datetime(end.year, end.month, end.day)
+    print(end, start)
     try:
         client = MongoClient('172.17.0.1', 27017)
         db = client.myVideo
