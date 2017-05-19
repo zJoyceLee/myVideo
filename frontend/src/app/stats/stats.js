@@ -24,14 +24,14 @@ function Controller($log, $http, myService, $location) {
     $location.path('/login');
   }
 
-  // $http({
-  //   method: 'GET',
-  //   url: 'http://127.0.0.1:5000/stats'
-  // }).then((response) => {
-  //   $log.log(response.data);
-  // }, () => {
+  $http({
+    method: 'GET',
+    url: 'http://127.0.0.1:5000/stats'
+  }).then((response) => {
+    $log.log(response.data);
+  }, () => {
 
-  // });
+  });
 
   vm.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales", "Tele Sales", "Corporate Sales"];
   vm.data = [300, 480, 100, 40, 120];
