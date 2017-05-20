@@ -8,8 +8,7 @@ def getVideoTitleAndTag(url):
     '''Get video title and tag from Youku
     Keyword arguments:
     url -- the url part
-    Return:
-    ret -- dict {'title': str, 'tag': str}
+    Return: dict {'title': str, 'tag': str}
     '''
     ret = {}
     if isinstance(url, type(None)) or (url == ''):
