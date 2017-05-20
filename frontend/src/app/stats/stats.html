@@ -5,6 +5,7 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           Chart1
+          <button type="button" class="pull-right" ng-click="page.toggle()">Toggle</button>
         </div>
         <div class="panel-body">
           <canvas id="base" class="chart-base" chart-type="page.type"
@@ -15,7 +16,7 @@
 
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6">
-      <canvas id="base" class="chart-base" chart-type="page.type"
+      <canvas id="base" class="chart-base" chart-type=""
         chart-data="page.data" chart-labels="page.labels" >
       </canvas>
     </div>
