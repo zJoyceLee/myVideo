@@ -332,9 +332,25 @@ def cache():
         client.close()
         return jsonify({'data': dic})
 
-@app.route('/download', methods=['POST'])
+@app.route('/download', methods=['GET', 'POST'])
 def download():
-    if request.method == 'POST':
+    if request.method == 'GET':
+        url = request.args['url'].encode('utf-8')
+        videoFormat = request.args['format'].encode('utf-8')
+        addr = request.args['addr'].encode('utf-8')
+        name = request.args['name'].encode('utf-8')
+        ext = request.args['ext'].encode('utf-8')
+        print('url={}'.format(url))
+        print('video-format={}'.format(videoFormat))
+        print('addr={}'.format(addr))
+        print('name={}'.format(name))
+        path =  '{}/{}'.format(addr, name)
+        if ext == 'mp4':
+            mimetype='video/mp4'
+        elif ext == 'flv':
+            mimetype='video/x-flv'
+        return send_file(path, mimetype=mimetype, as_attachment=True, attachment_filename=name)
+    elif request.method == 'POST':
         url = request.json['url'].encode('utf-8')
         videoFormat = request.json['format'].encode('utf-8')
         addr = request.json['addr'].encode('utf-8')

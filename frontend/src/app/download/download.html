@@ -70,11 +70,11 @@
                   <span class="glyphicon glyphicon-cloud-download"></span>
                   Cache
                 </button>
-                <button class="btn btn-xs btn-primary" ng-click="page.download(item, page.infos.streams[item].container)"
+                <a ng-href="http://127.0.0.1:5000/download?url={{page.myurl}}&format={{item}}&ext={{page.infos.streams[item].container}}&addr={{page.cached[item].addr}}&name={{page.cached[item].name}}" class="btn btn-xs btn-primary"
                         ng-disabled="!page.inCached(item, page.cached)">
                   <span class="glyphicon glyphicon-download"></span>
                   Download
-                </button>
+                </a>
               </td>
             </tr>
           </table>
