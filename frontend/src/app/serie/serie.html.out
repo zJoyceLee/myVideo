@@ -1,0 +1,12 @@
+<div class="panel panel-success">
+  <div class="panel-heading">
+    Serie
+    <button class="pull-right btn btn-default btn-xs" ng-click="page.getSerie()">Get</button>
+  </div>
+  <loading ng-if="!page.complete && page.getting"></loading>
+  <div class="panel-body" ng-if="page.complete">
+    <button ng-class="item.href === page.myurl? 'btn btn-xs btn-primary': 'btn btn-xs btn-default'" ng-repeat="item in page.serie" ng-click="page.select(item.href)">
+      {{ item.text }}
+    </button>
+  </div>
+</div>

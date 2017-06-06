@@ -133,7 +133,14 @@ function Controller($log, $http, myService) {
 }
 
 function download(data, filename, type) {
-  const file = new Blob([data], {type: type});
+  var bytes = new Uint8Array(data.length);
+  for (var i=0; i < data.length; ++i)
+      bytes[i] = data.charCodeAt(i);
+  const file = new Blob([bytes], {type: 'text/plain'});
+  console.log(data.length);
+  console.log(bytes.length);
+  console.log(file.size);
+  /*
   if (window.navigator.msSaveOrOpenBlob) { // IE10+
     window.navigator.msSaveOrOpenBlob(file, filename);
   } else { // Others
@@ -148,4 +155,6 @@ function download(data, filename, type) {
       window.URL.revokeObjectURL(url);
     }, 0);
   }
+  */
+  saveAs(file, filename);
 }

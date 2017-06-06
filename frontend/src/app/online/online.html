@@ -60,11 +60,16 @@
           </button>
         </div>
         <loading ng-if="!page.complete && page.getting"></loading>
-        <div class="panel-body myscroll" ng-if="page.complete">
-          <p><input type="text" placeholder="Search" ng-model="myfilter"></p>
-          <button class="btn btn-xs" ng-class="item.href === page.myurl? 'btn-primary': 'btn-default'" ng-repeat="item in page.serie | filter: myfilter" ng-click="page.select(item.href)">
-            {{ item.text }}
-          </button>
+        <div ng-if="page.set_serie">
+          <div class="panel-body myscroll" ng-if="page.complete">
+            <p><input type="text" placeholder="Search" ng-model="myfilter"></p>
+            <button class="btn btn-xs" ng-class="item.href === page.myurl? 'btn-primary': 'btn-default'" ng-repeat="item in page.serie | filter: myfilter" ng-click="page.select(item.href)">
+              {{ item.text }}
+            </button>
+          </div>
+        </div>
+        <div ng-if="!page.set_serie">
+          <h4>No Serie Found.</h4>
         </div>
       </div><!-- /Serie end -->
     </div>

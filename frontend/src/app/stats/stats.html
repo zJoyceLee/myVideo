@@ -10,22 +10,36 @@
         </div>
         <div class="panel-body">
           <canvas id="base" class="chart-base" chart-type="page.type"
-            chart-data="page.data" chart-labels="page.labels" >
+            chart-data="page.chart1data" chart-labels="page.labels" >
           </canvas>
         </div>
       </div>
     </div><!-- /Dynamic Chart end -->
 
     <!-- Chart2 -->
-    <div class="col-lg-4 col-md-6 col-sm-6">
+    <!-- <div class="col-lg-4 col-md-6 col-sm-6">
       <div class="panel panel-default">
         <div class="panel-heading">
-          Chart2
+          Chart1
           <button type="button" class="pull-right" ng-click="page.toggle()">Toggle</button>
         </div>
         <div class="panel-body">
           <canvas id="base" class="chart-base" chart-type="page.type"
-            chart-data="page.data" chart-labels="page.labels" >
+            chart-data="page.chart1data" chart-labels="page.labels" >
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div> --><!-- /Chart2 end -->
+
+  <div class="col-lg-4 col-md-6 col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Chart2
+        </div>
+        <div class="panel-body">
+          <canvas id="bar" class="chart chart-bar" chart-series="page.series"
+            chart-data="page.chart2data" chart-labels="page.labels" >
           </canvas>
         </div>
       </div>

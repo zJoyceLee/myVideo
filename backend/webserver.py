@@ -5,7 +5,8 @@ import os
 import datetime
 # import re
 import subprocess
-from flask import Flask, request, jsonify, Response, session
+import StringIO
+from flask import Flask, request, jsonify, Response, session, send_file
 from flask_cors import CORS
 
 # from flask_pymongo import PyMongo
@@ -53,6 +54,7 @@ def login():
                 ret = {'isExist': True, 'identify': False, 'user': {}}
         else:
             ret = {'isExist': False, 'identify': False, 'user': {}}
+        client.close()
         print(session)
         return jsonify(ret)
 
@@ -80,6 +82,7 @@ def register():
             ret = {'isExist': False, 'identify': False}
         else:
             ret = {'isExist': True, 'identify': False}
+        client.close()
         return jsonify(ret)
 
 @app.route('/stats')
@@ -87,7 +90,15 @@ def stats():
     print(session)
     client = MongoClient('172.17.0.1', 27017)
     db = client.myVideo
-    coll = db.dataset
+    pipeline = [
+        {"$unwind": "$tags"},
+        {'$group':{'_id':'$tags', 'total_area':{'$sum':1}}}
+    ]
+    print('pipeline', pipeline)
+    tmp = list(db.dataset.aggregate(pipeline))
+    print('tmp', tmp)
+    print('there')
+    client.close()
 
     # if not session.get('logged_in'):
     #     return "Please Sign in..."
@@ -137,8 +148,9 @@ def search():
                     counter = counter + random.randint(20, 30)
                 else:
                     counter = 1
-            print(counter)
+            print('Have been clicked {} time(s)'.format(counter))
             coll.update(key, {"$set": {'counter': counter}}, upsert=True)
+        client.close()
 
         # handle url => real urls
         # result = subprocess.check_output(['python3', './you-get/you-get', '-u', '--format=mp4', url])
@@ -148,6 +160,7 @@ def search():
 
         if 'mp4' in mystream:
             result = subprocess.check_output(['python3', './you-get/you-get', '-u', '--format=mp4', url])
+            print(parseRelUrl(result))
             return Response(json.dumps(parseRelUrl(result)), mimetype='application/json')
         else:
             return jsonify({'haveMP4': False, 'infos': 'Do not have MP4 source.'})
@@ -247,6 +260,7 @@ def videoLst():
                 tag.append(item.get('tag'))
             lst.append(item)
         # ret = [lst[i] for i in random.sample(range(len(lst)), 30)]
+        client.close()
         ret = lst
         return jsonify({'videos': ret, 'categories': tag})
     except:
@@ -269,6 +283,7 @@ def info():
         cached = None
         if not isinstance(record, type(None)):
             cached = coll.find_one({'url': url}).get('media')
+        client.close()
         return jsonify({'infos': result, 'record': json.dumps(cached)})
 
 
@@ -279,7 +294,8 @@ def cache():
         videoFormat = request.json['format'].encode('utf-8')
         videoExt = request.json['ext'].encode('utf-8')
         videoName = request.json['name'].encode('utf-8')
-        addr = '/media/joyce/Joyce/Download'
+        # addr = '/media/joyce/Joyce/Download'
+        addr = '/home/joyce/Poker/myVideo'
         result = subprocess.check_output(['python3', './you-get/you-get', '-o', addr, '--format={}'.format(videoFormat), url])
         print(result)
 
@@ -313,6 +329,7 @@ def cache():
                     }
                 }
             )
+        client.close()
         return jsonify({'data': dic})
 
 @app.route('/download', methods=['POST'])
@@ -325,17 +342,28 @@ def download():
         ext = request.json['ext'].encode('utf-8')
         print(url, videoFormat, addr, name)
         path =  '{}/{}'.format(addr, name)
-        print(path)
+        '''
+        # def generate():
+        #     with open(upath, 'rb') as f:
+        #         data = f.readlines()
+        #         for line in data:
+        #             yield line
         def generate():
             with open(path, 'rb') as f:
-                data = f.readlines()
-                for line in data:
-                    yield line
+                data = f.read()
+                print('length:  {}'.format(len(data)))
+            return data
+
         if ext == 'mp4':
             return  Response(generate(), mimetype="video/mp4")
         elif ext == 'flv':
             return Response(generate(), mimetype="video/x-flv")
-        # return jsonify({'data': 'hello'})
+        '''
+        if ext == 'mp4':
+            mimetype='video/mp4'
+        elif ext == 'flv':
+            mimetype='video/x-flv'
+        return send_file(path, mimetype=mimetype)
 
 
 if __name__ == "__main__":

@@ -33,12 +33,19 @@ function Controller($log, $http, myService, $location) {
 
   });
 
-  vm.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales", "Tele Sales", "Corporate Sales"];
-  vm.data = [300, 480, 100, 40, 120];
+  vm.labels = ["电视剧", "综艺", "电影", "动漫", "资讯", "娱乐"];
+  vm.chart1data = [300, 480, 382, 329, 40, 237];
   vm.type = 'polarArea';
 
   vm.toggle = function () {
     vm.type = vm.type === 'polarArea' ?
       'pie' : 'polarArea';
   };
+
+  vm.series = ['Male', 'Female'];
+
+  vm.chart2data = [
+    [ 65,  59, 188, 208, 29, 128],
+    [235, 421, 192, 112, 11, 109]
+  ];
 }

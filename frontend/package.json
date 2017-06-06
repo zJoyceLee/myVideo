@@ -77,5 +77,8 @@
     "extends": [
       "xo-space/esnext"
     ]
+  },
+  "dependencies": {
+    "flv.js": "^1.2.0"
   }
 }

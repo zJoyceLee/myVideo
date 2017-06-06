@@ -38,10 +38,14 @@ function Controller($sce, $timeout, $http, $log, myService) {
     }).then((response) => {
       $log.log('post success...get serie...');
       $log.log(response.data);
+      vm.set_serie = true;
       vm.serie = response.data.serie;
       global.serie = vm.serie;
       myService.set(global);
       $log.log(global);
+      if (_.isEmpty(vm.serie)) {
+        vm.set_serie = false;
+      }
       vm.complete = true;
     }, () => {
       $log.log('post failure...do not get serie...');

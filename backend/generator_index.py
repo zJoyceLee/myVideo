@@ -19,11 +19,11 @@ class Spider():
     def __init__(self):
         self.url = 'http://youku.com'
         self.res = requests.get(self.url)
-        self.soup = BeautifulSoup(self.res.content)
+        self.soup = BeautifulSoup(self.res.content, 'html.parser')
 
     def getVideoTag(self, myurl):
         res =  requests.get(myurl)
-        soup = BeautifulSoup(res.content)
+        soup = BeautifulSoup(res.content, 'html.parser')
         tag = soup.find(attrs={"name": "irCategory"})
         if isinstance(tag, type(None)):
             return 'No'
@@ -61,7 +61,8 @@ class Spider():
                 print('insert records successful\n'.upper())
             except:
                 print('collection insert error.\n'.upper())
-                sys.exit()
+                # sys.exit()
+                continue
 
     def parseSymbol(self, s):
         ret = s.replace('&amp;quot;', '"')
@@ -93,20 +94,27 @@ class Spider():
                             dic['img'] = self.parseUrl(item[5: -1])
 
                 if not (isinstance(dic.get('img'), type(None)) or isinstance(dic.get('href'), type(None))):
-                    dic['tag'] = self.getVideoTag(dic.get('href'))
-                    dic['date'] = datetime.datetime.utcnow()
-                    href = dic.get('href')
-                    key = {'href': href}
-                    dic.pop(href, None)
+                    url = dic.get('href')
+                    try:
+		        dic['tag'] = self.getVideoTag(url)
+                    except requests.exceptions.MissingSchema as e:
+                        print('[url={}][exception={}]: exception raised'.format(url, e))
+                        continue
 
-                    print(dic.get('title'))
-                    print(dic.get('img'))
+		    dic['date'] = datetime.datetime.utcnow()
+		    href = dic.get('href')
+		    key = {'href': href}
+		    dic.pop(href, None)
+
+		    print(dic.get('title'))
+		    print(dic.get('img'))
                     try:
                         collection.update(key,{"$set":dic}, upsert=True)
                         print('insert records successful\n'.upper())
                     except:
                         print('collection insert error.\n'.upper())
-                        sys.exit()
+                        # sys.exit()
+                        continue
 
 def foo():
     client = MongoClient('172.17.0.1', 27017)
@@ -115,5 +123,6 @@ def foo():
     s = Spider()
     s.parseYouku(coll)
     s.parseLazyContent(coll)
+    client.close()
 
 foo()
