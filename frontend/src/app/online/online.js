@@ -142,7 +142,6 @@ function Controller($sce, $timeout, $http, $log, myService) {
           preload: 'none',
           autoPlay: false,
           sources: vm.videos[0].sources,
-          theme: 'bower_components/videogular-themes-default/videogular.css',
           plugins: {
             controls: {
               autoHide: true,
